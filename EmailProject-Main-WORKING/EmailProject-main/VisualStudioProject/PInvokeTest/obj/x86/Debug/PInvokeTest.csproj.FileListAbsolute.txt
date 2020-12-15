@@ -1,0 +1,32 @@
+C:\Users\kampfvagen\Desktop\pinvoke\Debug\PInvokeTest.pdb
+C:\Users\kampfvagen\Desktop\pinvoke\PInvokeTest\obj\x86\Debug\PInvokeTest.csprojAssemblyReference.cache
+C:\Users\kampfvagen\Desktop\pinvoke\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.CoreCompileInputs.cache
+C:\Users\kampfvagen\Desktop\pinvoke\PInvokeTest\obj\x86\Debug\PInvokeTest.pdb
+C:\Users\kampfvagen\Desktop\pinvoke\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.GenerateResource.cache
+C:\Users\kampfvagen\Desktop\pinvoke\Debug\PInvokeTest.exe
+C:\Users\kampfvagen\Desktop\pinvoke\PInvokeTest\obj\x86\Debug\PInvokeTest.exe
+C:\Users\kampfvagen\Desktop\pinvoke\PInvokeTest\obj\x86\Debug\PInvokeTest.WEMAIL.resources
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\Debug\PInvokeTest.exe
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\Debug\PInvokeTest.pdb
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csprojAssemblyReference.cache
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.WEMAIL.resources
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.GenerateResource.cache
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.CoreCompileInputs.cache
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.exe
+C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\Debug\PInvokeTest.exe
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\Debug\PInvokeTest.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csprojAssemblyReference.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.WEMAIL.resources
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.GenerateResource.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.CoreCompileInputs.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.exe
+C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.pdb
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\Debug\PInvokeTest.exe
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\Debug\PInvokeTest.pdb
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csprojAssemblyReference.cache
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.GenerateResource.cache
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.CoreCompileInputs.cache
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.exe
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.pdb
+C:\Users\alexa\Desktop\Computerteknologi\3. Semester\Softwareteknologi\Jepp\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.Email.resources
