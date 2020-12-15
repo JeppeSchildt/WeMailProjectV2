@@ -87,28 +87,18 @@ namespace PInvokeTest
 
         public static void Wemailtransfer(MailAddress Sender,MailAddress Recipient, MailMessage message)
         {
-            char DL = '';
+            char DL = ''; //Possibly in need of changing, is not supported in TXT files. 
             try
             {
-                //MessageBox.Show("You're sending to a Wemail account", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 const int PORT_NO = 5000;
                 const string LOCALHOST = "127.0.0.1";
                 TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
                 NetworkStream nwStream = tcpclient.GetStream();
-                //sndr, timestamp, subject, txt
-                //var TTS = Sender.Address + DL + DateTime.Today.ToShortDateString() + DL + message.Subject + DL + message.Body + DL;//Improvement is to use stringbuilder append() as it is faster
-                /*
-                Email test = new Email("SENT", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body);
-                XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
-                StringWriter stringified = new StringWriter();
-                xmlSerializer.Serialize(stringified, test);
-                string res = "SENT" + stringified.ToString();
-                byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res); */
                 Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, "NON");
                 XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
                 StringWriter stringified = new StringWriter();
                 xmlSerializer.Serialize(stringified, test);
-                string res = "ALEX" + "SEND" + stringified.ToString();
+                string res = "ALEX"+DL+ "SEND"+DL+ stringified.ToString();
                 byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
 
 
@@ -127,13 +117,6 @@ namespace PInvokeTest
             {
                 ExceptionHandler.SendMailException(ex);
             }
-        }
-        public static void Forward(MailMessage message,MailAddress Recipient)
-        {
-            //barebone implementation
-            MailMessage newmsg = new MailMessage(message.Sender, Recipient);
-            newmsg.Subject = "fwd: " + message.Subject;
-            newmsg.Body = "------------\n"+message.Body;
         }
     }
     public class ExceptionHandler

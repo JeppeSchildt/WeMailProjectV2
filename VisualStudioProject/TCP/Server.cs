@@ -23,7 +23,7 @@ public class EmailFolder
 
     public EmailFolder receiveFolder()
     {
-        bool success;
+       // bool success; //currently not used
         EmailFolder emailFolderVar = new EmailFolder();
         return emailFolderVar;
         //return success == true; 
@@ -52,7 +52,7 @@ public class Email
         bool success = true;
         return success == true;
     }
-
+    /* WEMAIL ACCOUNT ONLY
     public bool sendEmail(string sender)
     {
         //Her skal den email vi ønsker at sende gemmes i serveren hos sender OG receiver
@@ -68,25 +68,7 @@ public class Email
         Console.WriteLine("\n Content: " + this.contentText);
 
         return success;
-    }
-
-    public bool forwardEmail()
-    {
-        bool success = true;
-        return success == true;
-    }
-
-    public bool replyToEmail()
-    {
-        bool success = true;
-        return success == true;
-    }
-    public bool flagEmail()
-    {
-        bool success = true;
-        return success == true;
-    }
-
+    } */
     public void Send(MailMessage message)
     {
         try
@@ -115,28 +97,6 @@ public class Email
         message.Subject = subject;
         message.Body = text;
         Send(message);
-        //          #pragma warning disable CS0219 // The variable 'DL' is assigned but its value is never used
-        //      char DL = '';
-        //          #pragma warning restore CS0219 // The variable 'DL' is assigned but its value is never used
-        /*
-        //MessageBox.Show("You're sending to a Wemail account", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        const int PORT_NO = 5000;
-        const string LOCALHOST = "127.0.0.1";
-        TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
-        NetworkStream nwStream = tcpclient.GetStream();
-        //sndr, timestamp, subject, txt
-        var TTS = Sender.Address + DL + DateTime.Today.ToShortDateString() + DL + message.Subject + DL + message.Body + DL;//Improvement is to use stringbuilder append() as it is faster
-        byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(TTS);
-        Console.WriteLine("Sending : " + message.Body);
-        nwStream.Write(bytesToSend, 0, bytesToSend.Length);
-
-        //---read back the text---
-        byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
-        int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-        Console.WriteLine("Received : " + Encoding.UTF8.GetString(bytesToRead, 0, bytesRead));
-        Console.ReadLine();
-        tcpclient.Close(); */
-
     }
     public void Forward(MailAddress Recipient)
     {
@@ -153,54 +113,6 @@ public class Email
         MailMessage newmessage = new MailMessage(Sender, Recipient);
         newmessage.Subject = "Re: " + this.subjectMatter;
         newmessage.Body = text + "------" + this.contentText;
-    }
-    public void Wemailtransfer()
-    {
-        MailAddress Recipient = new MailAddress(this.senderAddress); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
-        MailAddress Sender = new MailAddress(this.receiverAddress);
-        MailMessage message = new MailMessage(Sender, Recipient);
-
-        string subject = this.subjectMatter;
-        string text = this.contentText;
-       // string domain = to.Substring(to.LastIndexOf('@') + 1); //Takes everything to the right of @
-
-        message.Subject = subject;
-        message.Body = text;
-
-#pragma warning disable CS0219 // The variable 'DL' is assigned but its value is never used
-        char DL = '';
-#pragma warning restore CS0219 // The variable 'DL' is assigned but its value is never used
-        try
-        {
-            string server = "mail.smtp2go.com";
-            SmtpClient client = new SmtpClient(server);
-            client.Send(message);
-
-            /*
-            //MessageBox.Show("You're sending to a Wemail account", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            const int PORT_NO = 5000;
-            const string LOCALHOST = "127.0.0.1";
-            TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
-            NetworkStream nwStream = tcpclient.GetStream();
-            //sndr, timestamp, subject, txt
-            var TTS = Sender.Address + DL + DateTime.Today.ToShortDateString() + DL + message.Subject + DL + message.Body + DL;//Improvement is to use stringbuilder append() as it is faster
-            byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(TTS);
-            Console.WriteLine("Sending : " + message.Body);
-            nwStream.Write(bytesToSend, 0, bytesToSend.Length);
-
-            //---read back the text---
-            byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
-            int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-            Console.WriteLine("Received : " + Encoding.UTF8.GetString(bytesToRead, 0, bytesRead));
-            Console.ReadLine();
-            tcpclient.Close(); */
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Big ass exception:" + ex.ToString());
-            //Should return exception to client side, to exception handle using error prompts
-            //ExceptionHandler.SendMailException(ex); 
-        }
     }
 }
 
@@ -260,7 +172,10 @@ namespace Server
                 StringReader stringified = new StringReader(dataReceived);
                 receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
 
-
+                Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
+                Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
+                Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
+                Console.WriteLine("\n Content: " + receivedEmail.contentText);
                 //requestHandler(USER, REQ, dataReceived);
 
                 //---request handling---
@@ -275,7 +190,7 @@ namespace Server
                     case "SEND": //email deserialization
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);
-                        newEmail.sendEmail(USER);
+                        //newEmail.sendEmail(USER);
                         break;
                     case "FORWARD": //email deserialization
                         break;
