@@ -1,0 +1,23 @@
+﻿<Window x:Class="CLIENT.LogIn"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Email"
+        mc:Ignorable="d"
+        Title="Log in" Height="450" Width="800">
+    <Grid Margin="-50, -49, -53.6, -73.2">
+        
+        
+        <Button x:Name="logIn" Content="Log in" HorizontalAlignment="Left" Margin="204,167,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="logIn_Click"/>
+        
+        <Button x:Name="Create" Content="Create account" HorizontalAlignment="Left" Margin="204,201,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="Create_Click"/>
+
+        <Button x:Name="Forgot" Content="Forgot" HorizontalAlignment="Left" Margin="204,294,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="Forgot_Click"/>
+
+
+        <TextBox x:Name="UserID" x:FieldModifier="public" HorizontalAlignment="Left" Height="31" Margin="194,83,0,0" TextWrapping="Wrap" Text="User ID" VerticalAlignment="Top" Width="146" GotFocus="UserID_GotFocus"/>
+        <PasswordBox x:Name="Password" HorizontalAlignment="Left" Height="31" Margin="194,119,0,0"  Password="Password" VerticalAlignment="Top" Width="146" GotFocus="Password_GotFocus"/>
+
+    </Grid>
+</Window>
