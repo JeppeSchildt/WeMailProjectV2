@@ -11,15 +11,16 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using System.IO;
+using s = System.String;
 namespace PInvokeTest
 {
     public class Email
     {
-        public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText;
+        public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText,emailFlag;
 
         public Email() { }
 
-        public Email(string inputEmailType, string inputSenderAddress, string inputReceiverAddress, string inputTimeStamp, string inputSubjectMatter, string inputContentText)
+        public Email(s inputEmailType, s inputSenderAddress, s inputReceiverAddress, s inputTimeStamp, s inputSubjectMatter, s inputContentText,s inputFlag)
         {
             emailType = inputEmailType;
             senderAddress = inputSenderAddress;
@@ -27,6 +28,7 @@ namespace PInvokeTest
             timeStamp = inputTimeStamp;
             subjectMatter = inputSubjectMatter;
             contentText = inputContentText;
+            emailFlag = inputFlag;
         }
     }
 
@@ -88,7 +90,6 @@ namespace PInvokeTest
             char DL = '';
             try
             {
-
                 //MessageBox.Show("You're sending to a Wemail account", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 const int PORT_NO = 5000;
                 const string LOCALHOST = "127.0.0.1";
@@ -96,12 +97,22 @@ namespace PInvokeTest
                 NetworkStream nwStream = tcpclient.GetStream();
                 //sndr, timestamp, subject, txt
                 //var TTS = Sender.Address + DL + DateTime.Today.ToShortDateString() + DL + message.Subject + DL + message.Body + DL;//Improvement is to use stringbuilder append() as it is faster
+                /*
                 Email test = new Email("SENT", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body);
                 XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
                 StringWriter stringified = new StringWriter();
                 xmlSerializer.Serialize(stringified, test);
                 string res = "SENT" + stringified.ToString();
+                byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res); */
+                Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, "NON");
+                XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
+                StringWriter stringified = new StringWriter();
+                xmlSerializer.Serialize(stringified, test);
+                string res = "ALEX" + "SEND" + stringified.ToString();
                 byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
+
+
+
                 Console.WriteLine("Sending : " + message.Body);
                 nwStream.Write(bytesToSend, 0, bytesToSend.Length);
                     
@@ -123,10 +134,6 @@ namespace PInvokeTest
             MailMessage newmsg = new MailMessage(message.Sender, Recipient);
             newmsg.Subject = "fwd: " + message.Subject;
             newmsg.Body = "------------\n"+message.Body;
-        }
-        public static void Reply()
-        {
-            //
         }
     }
     public class ExceptionHandler

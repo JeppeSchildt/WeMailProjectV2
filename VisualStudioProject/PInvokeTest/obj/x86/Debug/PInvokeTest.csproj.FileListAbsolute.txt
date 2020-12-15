@@ -29,3 +29,11 @@ C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\Email
 C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.exe
 C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.pdb
 C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.Email.resources
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csprojAssemblyReference.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.Email.resources
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.GenerateResource.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.csproj.CoreCompileInputs.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.exe
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\PInvokeTest\obj\x86\Debug\PInvokeTest.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\Debug\PInvokeTest.exe
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\Debug\PInvokeTest.pdb
