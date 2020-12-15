@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailGithubRepo\\EmailProject-Main-WORKING\\EmailProject-main\\VisualStudioProject\\TCP\\TCP.csproj",
+      "projectUniqueName": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailV2\\VisualStudioProject\\TCP\\TCP.csproj",
       "projectName": "TCP",
-      "projectPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailGithubRepo\\EmailProject-Main-WORKING\\EmailProject-main\\VisualStudioProject\\TCP\\TCP.csproj",
+      "projectPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailV2\\VisualStudioProject\\TCP\\TCP.csproj",
       "packagesPath": "C:\\Users\\Jeppe\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailGithubRepo\\EmailProject-Main-WORKING\\EmailProject-main\\VisualStudioProject\\TCP\\obj\\",
+      "outputPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailV2\\VisualStudioProject\\TCP\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Jeppe\\AppData\\Roaming\\NuGet\\NuGet.Config",

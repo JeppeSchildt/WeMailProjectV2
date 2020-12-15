@@ -11,3 +11,16 @@ C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\Email
 C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.dll
 C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.pdb
 C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.genruntimeconfig.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\bin\Debug\netcoreapp3.1\TCP.exe
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\bin\Debug\netcoreapp3.1\TCP.deps.json
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\bin\Debug\netcoreapp3.1\TCP.runtimeconfig.json
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\bin\Debug\netcoreapp3.1\TCP.runtimeconfig.dev.json
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\bin\Debug\netcoreapp3.1\TCP.dll
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\bin\Debug\netcoreapp3.1\TCP.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.csprojAssemblyReference.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.AssemblyInfoInputs.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.AssemblyInfo.cs
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.csproj.CoreCompileInputs.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.dll
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailV2\VisualStudioProject\TCP\obj\Debug\netcoreapp3.1\TCP.genruntimeconfig.cache

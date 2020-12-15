@@ -13,39 +13,19 @@ using System.Xml.Serialization;
 using System.IO;
 namespace PInvokeTest
 {
-    public class Email
-    {
-        public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText;
-
-        public Email() { }
-
-        public Email(string inputEmailType, string inputSenderAddress, string inputReceiverAddress, string inputTimeStamp, string inputSubjectMatter, string inputContentText)
-        {
-            emailType = inputEmailType;
-            senderAddress = inputSenderAddress;
-            receiverAddress = inputReceiverAddress;
-            timeStamp = inputTimeStamp;
-            subjectMatter = inputSubjectMatter;
-            contentText = inputContentText;
-        }
-    }
-
     public partial class WEMAIL : Form
     {
         public WEMAIL()
         {
             InitializeComponent();
         }
-
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
 
         private void sendButton_Click(object sender, EventArgs e)
-        {
-           
+        {  
                 string to = reciptxtbox.Text; //Takes user input for recipient
                 string from = "Schildt0606@gmail.com"; //Current Sender. Needs changing to be personal to each account
 
@@ -59,36 +39,39 @@ namespace PInvokeTest
 
                 message.Subject = subject;
                 message.Body = text;
-
-
-
             if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                 {
                     SendMail.Wemailtransfer(Sender,Recipient,message);
                 }
                 else
                 {
-                    SendMail.Regular(Sender,Recipient,message);
+                    //SendMail.Regular(Sender,Recipient,message);
                 }
+        }
+    }
+    public class Email
+    {
+        public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText;
+
+        public Email() { } 
+
+        public Email(string inputEmailType, string inputSenderAddress, string inputReceiverAddress, string inputTimeStamp, string inputSubjectMatter, string inputContentText)
+        {
+            emailType = inputEmailType;
+            senderAddress = inputSenderAddress;
+            receiverAddress = inputReceiverAddress;
+            timeStamp = inputTimeStamp;
+            subjectMatter = inputSubjectMatter;
+            contentText = inputContentText;
         }
     }
     public class SendMail
     {
-        static string server = "mail.smtp2go.com"; //Current SMTP server. Coupled to IP
-        public static void Regular(MailAddress Sender, MailAddress Recipient, MailMessage message)
-        {
-            SmtpClient client = new SmtpClient(server);
-            client.Send(message);
-            MessageBox.Show("Email Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-
         public static void Wemailtransfer(MailAddress Sender,MailAddress Recipient, MailMessage message)
         {
             char DL = '';
             try
             {
-
                 //MessageBox.Show("You're sending to a Wemail account", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 const int PORT_NO = 5000;
                 const string LOCALHOST = "127.0.0.1";
@@ -116,17 +99,6 @@ namespace PInvokeTest
             {
                 ExceptionHandler.SendMailException(ex);
             }
-        }
-        public static void Forward(MailMessage message,MailAddress Recipient)
-        {
-            //barebone implementation
-            MailMessage newmsg = new MailMessage(message.Sender, Recipient);
-            newmsg.Subject = "fwd: " + message.Subject;
-            newmsg.Body = "------------\n"+message.Body;
-        }
-        public static void Reply()
-        {
-            //
         }
     }
     public class ExceptionHandler

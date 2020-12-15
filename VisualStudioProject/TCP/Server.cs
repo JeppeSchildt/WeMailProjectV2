@@ -22,29 +22,40 @@ public class Email
         timeStamp = inputTimeStamp;
         subjectMatter = inputSubjectMatter;
         contentText = inputContentText;
-    } //MailAddress Sender, MailAddress Recipient, MailMessage message
-    public void Wemailtransfer()
+    } 
+    
+    //MailAddress Sender, MailAddress Recipient, MailMessage message
+    public void Send(MailMessage message)
     {
-        MailAddress Recipient = new MailAddress(this.senderAddress); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
-        MailAddress Sender = new MailAddress(this.receiverAddress);
-        MailMessage message = new MailMessage(Sender, Recipient);
-
-        string subject = this.subjectMatter;
-        string text = this.contentText;
-       // string domain = to.Substring(to.LastIndexOf('@') + 1); //Takes everything to the right of @
-
-        message.Subject = subject;
-        message.Body = text;
-
-#pragma warning disable CS0219 // The variable 'DL' is assigned but its value is never used
-        char DL = '';
-#pragma warning restore CS0219 // The variable 'DL' is assigned but its value is never used
         try
         {
             string server = "mail.smtp2go.com";
             SmtpClient client = new SmtpClient(server);
             client.Send(message);
+            Console.WriteLine("Success");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Big ass exception:" + ex.ToString());
+            //Should return exception to client side, to exception handle using error prompts
+            //ExceptionHandler.SendMailException(ex); 
+        }
+    }
+    public void Send() //Sends mail using SMTP
+    {
+        MailAddress Recipient = new MailAddress(this.senderAddress); 
+        MailAddress Sender = new MailAddress(this.receiverAddress);
+        MailMessage message = new MailMessage(Sender, Recipient);
 
+        string subject = this.subjectMatter;
+        string text = this.contentText;
+        // string domain = to.Substring(to.LastIndexOf('@') + 1); //Takes everything to the right of @
+        message.Subject = subject;
+        message.Body = text;
+        Send(message);    
+//          #pragma warning disable CS0219 // The variable 'DL' is assigned but its value is never used
+    //      char DL = '';
+//          #pragma warning restore CS0219 // The variable 'DL' is assigned but its value is never used
             /*
             //MessageBox.Show("You're sending to a Wemail account", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             const int PORT_NO = 5000;
@@ -63,27 +74,33 @@ public class Email
             Console.WriteLine("Received : " + Encoding.UTF8.GetString(bytesToRead, 0, bytesRead));
             Console.ReadLine();
             tcpclient.Close(); */
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Big ass exception:" + ex.ToString());
-            //Should return exception to client side, to exception handle using error prompts
-            //ExceptionHandler.SendMailException(ex); 
-        }
+
+    }
+    public void Forward(MailAddress Recipient)
+    {
+        MailAddress Sender = new MailAddress(this.receiverAddress);
+        MailMessage newmessage = new MailMessage(Sender, Recipient);
+        newmessage.Subject = "Fwd: " + this.subjectMatter;
+        newmessage.Body = "Forwarded: " + this.contentText;
+        Send(newmessage);
+    }
+    public void Reply(string text)
+    {
+        MailAddress Sender = new MailAddress(this.receiverAddress);
+        MailAddress Recipient = new MailAddress(this.senderAddress);
+        MailMessage newmessage = new MailMessage(Sender, Recipient);
+        newmessage.Subject = "Re: " + this.subjectMatter;
+        newmessage.Body =  text + "------" + this.contentText;
     }
 }
-
 namespace Server
 {
     class Program
-    {
-      
+    {     
         const int PORT_NO = 5000;
         const string SERVER_IP = "127.0.0.1"; //Run over localhost
-        
         static void Main(string[] args)
         {
-            
             int i = 0;
             while (i < 10)
             {
@@ -117,9 +134,10 @@ namespace Server
                 string timeofday = receivedEmail.timeStamp;
                 string subject = receivedEmail.subjectMatter;
                 string msg = receivedEmail.contentText;
-                
-                //receivedEmail.Wemailtransfer();
-                Console.WriteLine("Received : " + dataReceived);
+
+                MailAddress Recip = new MailAddress("Liuli0002@gmail.com");
+                receivedEmail.Forward(Recip);
+                Console.WriteLine("Received : "  + dataReceived);
 
                 //---write back the text to the client---
                 // Console.WriteLine("Sending back : " + dataReceived);
