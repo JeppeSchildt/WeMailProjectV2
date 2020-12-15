@@ -22,9 +22,38 @@ public class Email
         timeStamp = inputTimeStamp;
         subjectMatter = inputSubjectMatter;
         contentText = inputContentText;
+<<<<<<< Updated upstream
     } 
     
     //MailAddress Sender, MailAddress Recipient, MailMessage message
+=======
+        emailFlag = inputFlag;
+    }
+
+    public bool deleteEmail()
+    {
+
+        bool success = true;
+        return success == true;
+    }
+    /* EMAIL ACCOUNT ONLY
+    public void sendEmail(string sender)
+    {
+        //Her skal den email vi ønsker at sende gemmes i serveren hos sender OG receiver
+        bool success;
+        if (sender == this.senderAddress)
+            success = true;
+        else
+            success = false;
+
+        Console.WriteLine("\n Sender: " + this.senderAddress);
+        Console.WriteLine("\n Time: " + this.timeStamp);
+        Console.WriteLine("\n Subject: " + this.subjectMatter);
+        Console.WriteLine("\n Content: " + this.contentText);
+
+        return success;
+    } */
+>>>>>>> Stashed changes
     public void Send(MailMessage message)
     {
         try
@@ -90,7 +119,13 @@ public class Email
         MailAddress Recipient = new MailAddress(this.senderAddress);
         MailMessage newmessage = new MailMessage(Sender, Recipient);
         newmessage.Subject = "Re: " + this.subjectMatter;
+<<<<<<< Updated upstream
         newmessage.Body =  text + "------" + this.contentText;
+=======
+        //Take insp from gmail response : line below not done!
+        newmessage.Body = text + " \n" +"On" + this.timeStamp + " -------------------------------------------- \n" + this.contentText;
+        Send(newmessage);
+>>>>>>> Stashed changes
     }
 }
 namespace Server
@@ -106,6 +141,17 @@ namespace Server
             {
                 //---listen at the specified IP and port no.---
                 IPAddress localAdd = IPAddress.Parse(SERVER_IP);
+                Email test = new Email();
+                test.receiverAddress = "what@wemail.com";
+                test.senderAddress = "schildt0606@gmail.com";
+                test.contentText = "How are you doing sir?";
+                test.subjectMatter = "Inquisition";
+                test.Send();
+                test.Reply("What is this");
+
+                Console.WriteLine("Email send");
+
+
                 TcpListener listener = new TcpListener(localAdd, PORT_NO);
                 Console.WriteLine("Listening...");
                 listener.Start();

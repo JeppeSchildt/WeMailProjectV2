@@ -13,6 +13,11 @@ using System.Xml.Serialization;
 using System.IO;
 namespace PInvokeTest
 {
+<<<<<<< Updated upstream
+=======
+    
+
+>>>>>>> Stashed changes
     public partial class WEMAIL : Form
     {
         public WEMAIL()
@@ -50,6 +55,26 @@ namespace PInvokeTest
         }
     }
     public class Email
+<<<<<<< Updated upstream
+=======
+    {
+        public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText, emailFlag;
+
+        public Email() { }
+
+        public Email(s inputEmailType, s inputSenderAddress, s inputReceiverAddress, s inputTimeStamp, s inputSubjectMatter, s inputContentText, s inputFlag)
+        {
+            emailType = inputEmailType;
+            senderAddress = inputSenderAddress;
+            receiverAddress = inputReceiverAddress;
+            timeStamp = inputTimeStamp;
+            subjectMatter = inputSubjectMatter;
+            contentText = inputContentText;
+            emailFlag = inputFlag;
+        }
+    }
+    public class SendMail
+>>>>>>> Stashed changes
     {
         public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText;
 
