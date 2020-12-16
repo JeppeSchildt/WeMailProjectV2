@@ -52,7 +52,7 @@ namespace CLIENT
         {
 
             string to = Emails.Text; //Takes user input for recipient
-            string from = LogIn.userID + "@wemail.com"; //Sender address specific to user
+            string from = LogIn.userID+"@wemail.com"; //Current Sender. Needs changing to be personal to each account
 
             MailAddress Sender = new MailAddress(from); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
             MailAddress Recipient = new MailAddress(to);
@@ -74,7 +74,6 @@ namespace CLIENT
             {
                 MessageBox.Show("Unknown Error :)))))");
             }
-
         }
     }
 
@@ -98,6 +97,7 @@ namespace CLIENT
     public class SendMail
     {
         public static bool MailCall(MailAddress Sender, MailAddress Recipient, MailMessage message)
+
         {
             char DL = ''; //Possibly in need of changing, is not supported in TXT files. 
             try {
@@ -105,13 +105,13 @@ namespace CLIENT
                 const string LOCALHOST = "127.0.0.1";
                 TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
                 NetworkStream nwStream = tcpclient.GetStream();
-                Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, "NON");
+                string flag = "Unread";
+                Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, flag);
                 XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
                 StringWriter stringified = new StringWriter();
                 xmlSerializer.Serialize(stringified, test);
-                string res = "ALEX" + DL + "SEND" + DL + stringified.ToString();
+                string res = LogIn.userID + DL + "SEND" + DL + stringified.ToString();
                 byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
-
                 Console.WriteLine("Sending : " + message.Body);
                 nwStream.Write(bytesToSend, 0, bytesToSend.Length);
                 //---read back the text---

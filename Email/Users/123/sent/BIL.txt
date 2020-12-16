@@ -1,0 +1,3 @@
+emailType,senderAddress, receiverAddress, timeStamp,newContentText, oldContentText,emailFlag
+emailType,senderAddress, receiverAddress, timeStamp,newContentText, oldContentText,emailFlag
+emailType,senderAddress, receiverAddress, timeStamp,newContentText, oldContentText,emailFlag
