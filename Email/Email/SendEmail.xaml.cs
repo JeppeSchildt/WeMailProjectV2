@@ -126,7 +126,6 @@ namespace CLIENT
                 nwStream.Write(bytesToSend, 0, bytesToSend.Length);
 
 
-
                 //---read back the text---
                 byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
                 int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
