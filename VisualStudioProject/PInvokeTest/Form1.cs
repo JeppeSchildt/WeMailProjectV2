@@ -33,7 +33,6 @@ namespace PInvokeTest
         {  
                 string to = reciptxtbox.Text; //Takes user input for recipient
                 string from = "Schildt0606@gmail.com"; //Current Sender. Needs changing to be personal to each account
-
                 MailAddress Sender = new MailAddress(from); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
                 MailAddress Recipient = new MailAddress(to);
                 MailMessage message = new MailMessage(Sender, Recipient);
@@ -44,6 +43,8 @@ namespace PInvokeTest
 
                 message.Subject = subject;
                 message.Body = text;
+
+            /* Client side does not care about type of domain
             if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                 {
                     SendMail.Wemailtransfer(Sender,Recipient,message);
@@ -51,7 +52,7 @@ namespace PInvokeTest
                 else
                 {
                     //SendMail.Regular(Sender,Recipient,message);
-                }
+                } */
         }
     }
     public class Email
