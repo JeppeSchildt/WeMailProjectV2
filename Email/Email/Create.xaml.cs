@@ -96,9 +96,9 @@ namespace CLIENT
             {
                 Done.IsEnabled = false;
                 Done.Content = "finish";
-                StreamWriter sw = new StreamWriter("S:/Email/Email/UserName.txt", true);
+                StreamWriter sw = new StreamWriter(@"C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\UserName.txt", true);
 
-                string dir = @"S:/Email/Email/Users/" + CUserName.Text;
+                string dir = @"C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\Users" + CUserName.Text;
                 // If directory does not exist, create it
                 if (!Directory.Exists(dir)) {
                     Directory.CreateDirectory(dir);

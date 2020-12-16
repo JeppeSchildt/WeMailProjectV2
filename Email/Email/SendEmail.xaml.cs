@@ -46,8 +46,8 @@ namespace CLIENT
             if (Message.Text == "Write here")
                 Message.Text = "";
         }
+        public void Send_Click(object sender, RoutedEventArgs e) //USER CLICKS SEND BUTTON
 
-        public void Send_Click(object sender, RoutedEventArgs e)
         {
             string to = Emails.Text; //Takes user input for recipient
             string from = LogIn.userID+"@wemail.com"; //Current Sender. Needs changing to be personal to each account
@@ -125,12 +125,17 @@ namespace CLIENT
                 Console.WriteLine("Sending : " + message.Body);
                 nwStream.Write(bytesToSend, 0, bytesToSend.Length);
 
+
+
                 //---read back the text---
                 byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
                 int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-                Console.WriteLine("Received : " + Encoding.UTF8.GetString(bytesToRead, 0, bytesRead));
-                Console.ReadLine();
+                //string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
+                
+                //gets return signal but needs return class aswell.. check serialization
+                MessageBox.Show("Succes GGGL: " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
                 tcpclient.Close();
+                return /*bool.Parse*/(true/*returnsignal*/);
             }
             catch (Exception ex) {
                 ExceptionHandler.SendMailException(ex);

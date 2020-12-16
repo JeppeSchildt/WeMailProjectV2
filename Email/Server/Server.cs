@@ -11,9 +11,6 @@ using System.Xml.Serialization;
 using System.IO;
 using s = System.String;
 
-
-
-
 public class User
 {
     public string username, password;
@@ -32,10 +29,15 @@ public class EmailFolder
         //return success == true; 
     }
 }
+public class ReturnClass
+{
+    public ReturnClass() {}
+    public ReturnClass(Exception ex, bool success) {}
+}
 public class Email
 {
     public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText, emailFlag;
-
+    
     public Email() { }
     //remember s = string
     public Email(s inputEmailType, s inputSenderAddress, s inputReceiverAddress, s inputTimeStamp, s inputSubjectMatter, s inputContentText, s inputFlag)
@@ -55,23 +57,6 @@ public class Email
         bool success = true;
         return success == true;
     }
-    /* WEMAIL ACCOUNT ONLY
-    public bool sendEmail(string sender)
-    {
-        //Her skal den email vi ønsker at sende gemmes i serveren hos sender OG receiver
-        bool success;
-        if (sender == this.senderAddress)
-            success = true;
-        else
-            success = false;
-
-        Console.WriteLine("\n Sender: " + this.senderAddress);
-        Console.WriteLine("\n Time: " + this.timeStamp);
-        Console.WriteLine("\n Subject: " + this.subjectMatter);
-        Console.WriteLine("\n Content: " + this.contentText);
-
-        return success;
-    } */
     public void Send(MailMessage message)
     {
         try {
@@ -121,7 +106,6 @@ namespace Server
 {
     class Server
     {
-
         const int PORT_NO = 5000;
         const string SERVER_IP = "127.0.0.1"; //Run over localhost
         /* Core driver of server */
@@ -171,6 +155,10 @@ namespace Server
                 XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
                 StringReader stringified = new StringReader(dataReceived);
                 receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
+                Console.WriteLine("sending return");
+                byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
+                nwStream.Write(buffer, 0, teasting.Length);
+                
                 receivedEmail.Send();
                 Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
                 Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
@@ -192,6 +180,7 @@ namespace Server
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
+
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                        // if (domain == "wemail.com") { 
                             //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
@@ -208,11 +197,15 @@ namespace Server
                             Write.Files(newEmail);
                             Write.read(newEmail);
                     /*    }
+
                         else {
                             //store in senders sent
                             Write.Files(newEmail);
                             Write.read(newEmail);
+
                         } */
+
+
                         //newEmail.sendEmail(USER);
                         break;
                     case "FORWARD": //email deserialization
@@ -232,7 +225,9 @@ namespace Server
                 //requestHandler(USER, REQ, dataReceived);
 
                 //---something important---
-                nwStream.Write(buffer, 0, bytesRead);
+                //Writing back to client
+                byte[] testing = Encoding.ASCII.GetBytes("Are you receiving this message?");
+                nwStream.Write(buffer, 0, testing.Length);
                 client.Close();
                 listener.Stop();
            }

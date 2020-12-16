@@ -58,8 +58,24 @@ namespace CLIENT
 
         private void logIn_Click(object sender, RoutedEventArgs e)
         {
+            string currentdir = Environment.CurrentDirectory;
+            MessageBox.Show(currentdir);
+            try
+            {
+                while (!(currentdir.EndsWith(@"\WeMailV2\Email")))
+                {
+                    currentdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"));
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error setting the Working Directory! \n" + @"Make sure your WeMailV2\Email\ Directory is working and named as such! ");
+            }
 
-            string InfoList = @"S:/Email/Email/UserName.txt";
+            MessageBox.Show("Error setting the Working Directory! \n" + "Make sure your: \n" +@"WeMailV2\Email\ Directory" + "\n is working and named as such! ");
+            string dbdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"))+@"\UserName.txt";
+            MessageBox.Show(dbdir);
+            string InfoList = @"C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\UserName.txt"; //Location of shit
 
             if (!File.Exists(InfoList)) {
                 using (StreamWriter sw = File.CreateText(InfoList)) {
@@ -69,10 +85,9 @@ namespace CLIENT
             }
 
 
-            using (var sr = new StreamReader("S:/Email/Email/UserName.txt"))  // read the directry of the userid and password
+            using (var sr = new StreamReader(@"C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\UserName.txt"))  // read the directry of the userid and password
             {
                 string Decrypt = DecryptPass(Password.Password);
-
                 while (!sr.EndOfStream) {
                     var line = sr.ReadLine();
                     string[] words = line.Split(',');
