@@ -182,6 +182,7 @@ namespace Server
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
 
 
+
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                        // if (domain == "wemail.com") { 
                             //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
@@ -200,15 +201,13 @@ namespace Server
                     /*    }
 
 
+
                         else {
                             //store in senders sent
                             Write.Files(newEmail);
                             Write.read(newEmail);
 
-
-                        } */
-
-
+                        }*/
 
                         //newEmail.sendEmail(USER);
                         break;
