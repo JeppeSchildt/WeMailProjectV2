@@ -78,7 +78,6 @@ namespace CLIENT
                     string[] words = line.Split(',');
                     if (String.IsNullOrEmpty(line)) continue;
 
-
                     if (words[0].IndexOf(UserID.Text, StringComparison.CurrentCultureIgnoreCase) >= 0 && words[1].IndexOf(Decrypt, StringComparison.CurrentCultureIgnoreCase) >= 0)
                     // if string  is found, return +1   if not return -1, if empty return 0
                     {
@@ -87,7 +86,6 @@ namespace CLIENT
                         inbox.Show();
                         this.Hide();
                         return;
-
                     }
                 }
                 MessageBox.Show("Wrong user name or password, create a new user name");

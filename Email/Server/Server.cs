@@ -192,16 +192,27 @@ namespace Server
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
-                        if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) 
-                        {
-                           Write.Files(newEmail);
+                        Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
+                       // if (domain == "wemail.com") { 
+                            //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
+                            /*  var reciver = newEmail.receiverAddress;
+                              String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
+
+                              var receiverPath = Path.Combine("S:/Email/Email/Users/", reciverID);
+                              if (Directory.Exists(reciverID)) 
+                              {
+                                  Write.Files2(newEmail);
+                                  Write.read(newEmail);
+                              }
+                            */
+                            Write.Files(newEmail);
                             Write.read(newEmail);
-                        }
+                    /*    }
                         else {
                             //store in senders sent
                             Write.Files(newEmail);
                             Write.read(newEmail);
-                        }
+                        } */
                         //newEmail.sendEmail(USER);
                         break;
                     case "FORWARD": //email deserialization

@@ -1,6 +1,4 @@
-﻿//Client
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +17,7 @@ using System.Net.Mail;
 using System.Xml.Serialization;
 using System.IO;
 using s = System.String;
+
 
 namespace CLIENT
 {
@@ -48,32 +47,34 @@ namespace CLIENT
                 Message.Text = "";
         }
 
-        public void Send_Click(object sender, RoutedEventArgs e) //USER CLICKS SEND BUTTON
+        public void Send_Click(object sender, RoutedEventArgs e)
         {
-
             string to = Emails.Text; //Takes user input for recipient
             string from = LogIn.userID+"@wemail.com"; //Current Sender. Needs changing to be personal to each account
-
+            
             MailAddress Sender = new MailAddress(from); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
             MailAddress Recipient = new MailAddress(to);
             MailMessage message = new MailMessage(Sender, Recipient);
 
             string subject = Subject.Text;
             string text = @Message.Text;
+            string domain = to.Substring(to.LastIndexOf('@') + 1); //Takes everything to the right of @
+
             message.Subject = subject;
-            message.Body = text;        
-            bool suc = SendMail.MailCall(Sender, Recipient, message); //serializes information and ships to client
-            if (suc == true)
-            {
-                MessageBox.Show("Email has been sent!!");
-                Inbox inbox = new Inbox();            // show the next window
-                inbox.Show();
-                this.Hide();
+            message.Body = text;
+
+            if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
+                SendMail.Wemailtransfer(Sender, Recipient, message);
             }
-            else
-            {
-                MessageBox.Show("Unknown Error :)))))");
+            else {
+                SendMail.Regular(Sender, Recipient, message);
             }
+        
+        MessageBox.Show("Email has been sent!!");
+
+            Inbox inbox = new Inbox();            // show the next window
+            inbox.Show();
+            this.Hide();
         }
     }
 
@@ -96,8 +97,15 @@ namespace CLIENT
     }
     public class SendMail
     {
-        public static bool MailCall(MailAddress Sender, MailAddress Recipient, MailMessage message)
+        static string server = "mail.smtp2go.com"; //Current SMTP server. Coupled to IP
+        public static void Regular(MailAddress Sender, MailAddress Recipient, MailMessage message)
+        {
+            SmtpClient client = new SmtpClient(server);
+            client.Send(message);
+           // MessageBox.Show("Email Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
+        public static void Wemailtransfer(MailAddress Sender, MailAddress Recipient, MailMessage message)
         {
             char DL = ''; //Possibly in need of changing, is not supported in TXT files. 
             try {
@@ -112,19 +120,20 @@ namespace CLIENT
                 xmlSerializer.Serialize(stringified, test);
                 string res = LogIn.userID + DL + "SEND" + DL + stringified.ToString();
                 byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
+
+
                 Console.WriteLine("Sending : " + message.Body);
                 nwStream.Write(bytesToSend, 0, bytesToSend.Length);
+
                 //---read back the text---
                 byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
                 int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-                string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
-                Console.WriteLine("Succes : " + returnsignal); //Recieves true if success, false if error. Should be changed to a exception if error later. 
+                Console.WriteLine("Received : " + Encoding.UTF8.GetString(bytesToRead, 0, bytesRead));
+                Console.ReadLine();
                 tcpclient.Close();
-                return bool.Parse(returnsignal);
             }
             catch (Exception ex) {
                 ExceptionHandler.SendMailException(ex);
-                return false;
             }
         }
     }

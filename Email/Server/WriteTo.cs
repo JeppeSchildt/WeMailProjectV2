@@ -23,6 +23,18 @@ namespace Server
             sw.Close();
         }
 
+        public static void Files2(Email inputEmail)
+        {
+            var reciver = inputEmail.receiverAddress;
+            String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
+
+            StreamWriter sw = new StreamWriter("S:/Email/Email/Users/" + reciverID + "/inbox/" + inputEmail.subjectMatter + ".txt", true);
+            sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
+                  inputEmail.contentText + "," + inputEmail.emailFlag);
+            sw.Flush();
+            sw.Close();
+        }
+
         public static void read(Email ReadFile)
         {
             String senderEmail = ReadFile.senderAddress;
@@ -36,12 +48,11 @@ namespace Server
                     if (String.IsNullOrEmpty(line)) continue;
                     Console.WriteLine(words[0]);
                 }
-
             }
-            
-
-
         }
+
+      
+
     }
 }
 

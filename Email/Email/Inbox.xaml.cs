@@ -40,12 +40,13 @@ namespace CLIENT
 
         private void Text()       // function to print the list of mails in sent folder
         {
-            List<string> FillIn = new List<string>();
-            FillIn = FindSent();      // FillIn er også en list med string
-            var numberOfLabels = FillIn.Count;
-            List<string> FileName = new List<string>();
+           // List<string> FillIn = new List<string>();
+            var FillIn = FindSent();      // FillIn er også en list med string
+           // var numberOfLabels = FillIn.Count;
+            var numberOfLabels = 3;   // Only 3 labels now
+          
 
-            FileName = FillIn;
+          var FileName = FillIn;
 
             for (int i = 1; i <= numberOfLabels; i++) {
                 FileName[i-1] = System.IO.Path.GetFileNameWithoutExtension(FillIn[i-1]);
@@ -53,8 +54,7 @@ namespace CLIENT
                 var label = (Label)this.FindName(labelName);
                 label.Content = FileName[i-1];
             }
-        }
-        
+        }  
 
         private void SentFolder_Click(object sender, RoutedEventArgs e)
         {

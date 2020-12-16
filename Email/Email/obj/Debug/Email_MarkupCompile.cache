@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\Email\obj\Debug\
+S:\Email\Email\Email\obj\Debug\
 Email
 none
 false
 DEBUG;TRACE
-C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\Email\App.xaml
+S:\Email\Email\Email\App.xaml
 4873289387
 
-11-1528264597
+10-685905230
 13-1505183044
 logIn.xaml;Create.xaml;Inbox.xaml;SendEmail.xaml;
 
-True
+False
 
