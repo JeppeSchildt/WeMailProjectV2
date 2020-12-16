@@ -11,6 +11,9 @@ using System.Xml.Serialization;
 using System.IO;
 using s = System.String;
 
+
+
+
 public class User
 {
     public string username, password;
@@ -168,11 +171,13 @@ namespace Server
                 XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
                 StringReader stringified = new StringReader(dataReceived);
                 receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
-
+                receivedEmail.Send();
                 Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
                 Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
                 Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
                 Console.WriteLine("\n Content: " + receivedEmail.contentText);
+
+
                 //requestHandler(USER, REQ, dataReceived);
 
                 //---request handling---
@@ -186,6 +191,17 @@ namespace Server
                     case "SEND": //email deserialization
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);
+                        string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
+                        if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) 
+                        {
+                           Write.Files(newEmail);
+                            Write.read(newEmail);
+                        }
+                        else {
+                            //store in senders sent
+                            Write.Files(newEmail);
+                            Write.read(newEmail);
+                        }
                         //newEmail.sendEmail(USER);
                         break;
                     case "FORWARD": //email deserialization
@@ -208,7 +224,7 @@ namespace Server
                 nwStream.Write(buffer, 0, bytesRead);
                 client.Close();
                 listener.Stop();
-            }
+           }
         }
     }
 }

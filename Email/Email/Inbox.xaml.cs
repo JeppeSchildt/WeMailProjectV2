@@ -60,9 +60,9 @@ namespace CLIENT
         {
             Text();
 
-            Write.hey();
-            Write.read();
-            Console.WriteLine(Read.you2());
+           // Write.hey();
+           // Write.read();
+           // Console.WriteLine(Read.you2());
             
         }
 

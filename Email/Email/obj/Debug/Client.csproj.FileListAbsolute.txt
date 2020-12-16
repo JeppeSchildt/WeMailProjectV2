@@ -18,3 +18,4 @@ S:\Email\Email\Email\obj\Debug\Client.csproj.GenerateResource.cache
 S:\Email\Email\Email\obj\Debug\Client.csproj.CoreCompileInputs.cache
 S:\Email\Email\Email\obj\Debug\Email.exe
 S:\Email\Email\Email\obj\Debug\Email.pdb
+S:\Email\Email\Email\obj\Debug\CLIENT.csprojAssemblyReference.cache

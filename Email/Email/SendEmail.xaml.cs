@@ -52,11 +52,9 @@ namespace CLIENT
 
         public void Send_Click(object sender, RoutedEventArgs e)
         {
-
-
             string to = Emails.Text; //Takes user input for recipient
-            string from = "Schildt0606@gmail.com"; //Current Sender. Needs changing to be personal to each account
-
+            string from = LogIn.userID+"@wemail.com"; //Current Sender. Needs changing to be personal to each account
+            
             MailAddress Sender = new MailAddress(from); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
             MailAddress Recipient = new MailAddress(to);
             MailMessage message = new MailMessage(Sender, Recipient);
@@ -69,7 +67,6 @@ namespace CLIENT
             message.Body = text;
 
 
-
             if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                 SendMail.Wemailtransfer(Sender, Recipient, message);
             }
@@ -77,13 +74,11 @@ namespace CLIENT
                 SendMail.Regular(Sender, Recipient, message);
             }
         
-
         MessageBox.Show("Email has been sent!!");
 
             Inbox inbox = new Inbox();            // show the next window
             inbox.Show();
             this.Hide();
-
         }
     }
 
@@ -114,7 +109,6 @@ namespace CLIENT
            // MessageBox.Show("Email Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
         public static void Wemailtransfer(MailAddress Sender, MailAddress Recipient, MailMessage message)
         {
             char DL = ''; //Possibly in need of changing, is not supported in TXT files. 
@@ -123,13 +117,13 @@ namespace CLIENT
                 const string LOCALHOST = "127.0.0.1";
                 TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
                 NetworkStream nwStream = tcpclient.GetStream();
-                Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, "NON");
+                string flag = "Unread";
+                Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, flag);
                 XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
                 StringWriter stringified = new StringWriter();
                 xmlSerializer.Serialize(stringified, test);
-                string res = "ALEX" + DL + "SEND" + DL + stringified.ToString();
+                string res = LogIn.userID + DL + "SEND" + DL + stringified.ToString();
                 byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
-
 
 
                 Console.WriteLine("Sending : " + message.Body);

@@ -52,15 +52,10 @@ namespace CLIENT
         {
             using (var sr = new StreamReader("S:/Email/Email/Users/" + LogIn.userID +"/sent/" + subjectMatter+ ".txt"))  // read the directry of the userid and password
             {
-
                 while (!sr.EndOfStream) {
                     var line = sr.ReadLine();
                     string[] words = line.Split(',');
-                    if (String.IsNullOrEmpty(line)) continue;                 
-
-                    Console.WriteLine(words[1]);
-
-                    Console.WriteLine(words[0]);
+                    if (String.IsNullOrEmpty(line)) continue;
                 }
             }
 
