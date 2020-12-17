@@ -63,14 +63,16 @@ namespace CLIENT
             message.Subject = subject;
             message.Body = text;
 
+            SendMail.Wemailtransfer(Sender, Recipient, message);
+            /*
             if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                 SendMail.Wemailtransfer(Sender, Recipient, message);
             }
             else {
                 SendMail.Regular(Sender, Recipient, message);
-            }
-        
-        MessageBox.Show("Email has been sent!!");
+            }*/
+
+            MessageBox.Show("Email has been sent!!");
 
             Inbox inbox = new Inbox();            // show the next window
             inbox.Show();

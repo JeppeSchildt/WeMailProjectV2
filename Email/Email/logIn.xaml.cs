@@ -81,7 +81,7 @@ namespace CLIENT
         private void logIn_Click(object sender, RoutedEventArgs e)
         {
             
-            string InfoList = dbdir+@"\UserName.txt"; //Location of UserName.txt //Can be done smarter later
+            string InfoList = dbdir+@"\UserName.txt"; // \WeMailProjectV2\Email
             MessageBox.Show("info: \n" + InfoList);
             if (!File.Exists(InfoList)) {
                 using (StreamWriter sw = File.CreateText(InfoList)) {
