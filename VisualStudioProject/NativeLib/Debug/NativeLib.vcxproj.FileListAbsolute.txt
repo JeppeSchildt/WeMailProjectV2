@@ -1,4 +1,0 @@
-C:\Users\kampfvagen\Desktop\pinvoke\NativeLib\Debug\NativeLib.vcxprojAssemblyReference.cache
-C:\Users\Jeppe\Desktop\EmailProject\EmailProject-main\EmailProject-main\VisualStudioProject\NativeLib\Debug\NativeLib.vcxprojAssemblyReference.cache
-C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main\EmailProject-main\VisualStudioProject\NativeLib\Debug\NativeLib.vcxprojAssemblyReference.cache
-C:\Users\Jeppe\Documents\GitHub\WeMailGithubRepo\EmailProject-Main-WORKING\EmailProject-main\VisualStudioProject\NativeLib\Debug\NativeLib.vcxprojAssemblyReference.cache

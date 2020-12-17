@@ -31,7 +31,7 @@ namespace CLIENT
             MessageBox.Show(currentdir);
             try
             {
-                while (!(currentdir.EndsWith(@"\WeMailV2\Email")))
+                while (!(currentdir.EndsWith(@"\WeMailProjectV2\Email")))
                 {
                     currentdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"));
                 }
@@ -40,11 +40,12 @@ namespace CLIENT
             {
                 MessageBox.Show("Error setting the Working Directory! \n" + @"Make sure your WeMailV2\Email\"+"\nDirectory is working and named as such! ");
             }
-
+            MessageBox.Show("chris"+currentdir);
             // TESTING FUNCTION:
             //MessageBox.Show("Error setting the Working Directory! \n" + "Make sure your: \n" + @"WeMailV2\Email\ Directory" + "\n is working and named as such! ");
-           
-            dbdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\")) + @"\UserName.txt"; //Location of UserName.txt
+
+            //dbdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\")) + @"\UserName.txt"; //Location of UserName.txt
+            dbdir = currentdir;
             //TESTING FUNCTION:
             //MessageBox.Show(dbdir);
         }
