@@ -37,3 +37,16 @@ S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csproj.Core
 S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.dll
 S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.pdb
 S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.exe
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.deps.json
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.json
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.dev.json
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.dll
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csprojAssemblyReference.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfoInputs.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfo.cs
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csproj.CoreCompileInputs.cache
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.dll
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.pdb
+C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.genruntimeconfig.cache

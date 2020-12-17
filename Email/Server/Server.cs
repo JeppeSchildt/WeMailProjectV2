@@ -62,6 +62,7 @@ public class Email
         try {
             string server = "mail.smtp2go.com";
             SmtpClient client = new SmtpClient(server);
+            Console.WriteLine("Recipient yallah::"+message.To);
             client.Send(message);
             Console.WriteLine("Success");
         }
@@ -73,8 +74,8 @@ public class Email
     }
     public void Send() //Sends mail using SMTP
     {
-        MailAddress Recipient = new MailAddress(this.senderAddress);
-        MailAddress Sender = new MailAddress(this.receiverAddress);
+        MailAddress Recipient = new MailAddress(this.receiverAddress);
+        MailAddress Sender = new MailAddress(this.senderAddress);
         MailMessage message = new MailMessage(Sender, Recipient);
 
         string subject = this.subjectMatter;
@@ -84,9 +85,10 @@ public class Email
         message.Body = text;
         Send(message);
     }
-    public void Forward(MailAddress Recipient)
+    public void Forward(MailAddress Recipient) //Not sure about recipient vs sender
     {
-        MailAddress Sender = new MailAddress(this.receiverAddress);
+
+        MailAddress Sender = new MailAddress(this.senderAddress);
         MailMessage newmessage = new MailMessage(Sender, Recipient);
         newmessage.Subject = "Fwd: " + this.subjectMatter;
         newmessage.Body = "Forwarded: " + this.contentText;
@@ -129,6 +131,7 @@ namespace Server
         }
         static void Main(string[] args)
         {
+            string dbdir = Write.dbdir;
             while (true) {
                 //---listen at the specified IP and port no.---
                 IPAddress localAdd = IPAddress.Parse(SERVER_IP);
@@ -187,7 +190,7 @@ namespace Server
                             var reciver = newEmail.receiverAddress;
                             String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
 
-                            var receiverPath = Path.Combine("S:/Email/Email/Users/", reciverID); 
+                            var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID); 
                             if (Directory.Exists(reciverID))
                             {
                                 Write.Files2(newEmail);

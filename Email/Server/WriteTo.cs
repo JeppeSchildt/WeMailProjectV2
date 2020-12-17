@@ -15,11 +15,11 @@ namespace Server
         {
             
             string currentdir = Environment.CurrentDirectory; //Gets location of exe file
-            //MessageBox.Show(currentdir);
+            Console.WriteLine("Curr dir is:" + currentdir);
             try {
                 while (!(currentdir.EndsWith(@"\WeMailProjectV2\Email"))) {
                     currentdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"));
-                    // MessageBox.Show(currentdir);
+                    Console.WriteLine("curr dir is:" + currentdir);
                 }
             }
             catch {
@@ -30,10 +30,12 @@ namespace Server
 
         public static void Files(Email inputEmail)
         {
+            Loca();
             String senderEmail = inputEmail.senderAddress;
             String userID = senderEmail.Substring(0, senderEmail.IndexOf("@"));    // userID before @
-
-            StreamWriter sw = new StreamWriter(dbdir +"/ Users/" + userID + "/sent/" + inputEmail.subjectMatter + ".txt", true);
+            Console.WriteLine("dbdir is:"+dbdir);
+            
+            StreamWriter sw = new StreamWriter(dbdir +"/Users/" + userID + "/sent/" + inputEmail.subjectMatter + ".txt", true);
             sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
                   inputEmail.contentText + "," + inputEmail.emailFlag);
             sw.Flush();
