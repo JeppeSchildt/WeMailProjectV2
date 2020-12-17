@@ -1,6 +1,4 @@
-﻿//SERVER / J+A 15/12 14.00
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +13,16 @@ public class User
 {
     public string username, password;
     public List<EmailFolder> userEmailFolders;
+}
+public class LoginAttempt
+{
+    public string UserName, Password;
+    public LoginAttempt() { } //Needs empty constructor to deserialize into 
+    public LoginAttempt(string UN, string Pass)
+    {
+        UserName = UN;
+        Password = Pass;
+    }
 }
 public class UserAccount
 {
@@ -145,18 +153,19 @@ namespace Server
         {
             string dbdir = Write.dbdir;
             while (true) {
+
+
                 //---listen at the specified IP and port no.---
                 IPAddress localAdd = IPAddress.Parse(SERVER_IP);
-                TcpListener listener = new TcpListener(localAdd, PORT_NO);
+                TcpListener CTSlistener = new TcpListener(localAdd, PORT_NO);
                 Console.WriteLine("Listening...");
-                listener.Start();
+                CTSlistener.Start();
                 //---incoming client connected---
-                TcpClient client = listener.AcceptTcpClient();
+                TcpClient client = CTSlistener.AcceptTcpClient();
              
                 //---get the incoming data through a network stream---
                 NetworkStream nwStream = client.GetStream();
                 byte[] buffer = new byte[client.ReceiveBufferSize];
-
                 //---read incoming stream---
                 int bytesRead = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
                 string dataReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
@@ -166,21 +175,23 @@ namespace Server
                 string REQ = dataReceived.Substring(0, dataReceived.IndexOf('')); //REQUEST 
                 dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
                 Console.WriteLine("sending return");
-                byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
-                nwStream.Write(buffer, 0, teasting.Length);
+                //byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
+                //nwStream.Write(buffer, 0, teasting.Length);
 
 
 
                 //---request handling---
                 switch (REQ) {
-                    case "CREATEUSER": //user deserialization
+                    case "CREATEUSER": //DONE?
+                        { 
+                        //user deserialization
                         Console.WriteLine("REQ: CREATE USER BIG NICE");
                         UserAccount useraccount = new UserAccount();
                         useraccount = deserializer(useraccount, dataReceived);
                         Console.WriteLine("\n Account:: " + useraccount.UserName);
                         Console.WriteLine("\n Pass:: " + useraccount.PassWord);
                         Console.WriteLine("\n PhoneNumber:: " + useraccount.PhoneNumber);
-                        Console.WriteLine("DATABASE DIRECTORY: " +dbdir);
+                        Console.WriteLine("DATABASE DIRECTORY: " + dbdir);
                         StreamWriter sw = new StreamWriter(dbdir + @"\UserName.txt", true);
                         string dir = dbdir + @"\Users\" + useraccount.UserName;
                         if (!(Directory.Exists(dir)))
@@ -199,12 +210,58 @@ namespace Server
                         sw.Flush();
                         sw.Close();
                         break;
-                    case "LOGIN": //user deserialization
-                        break;
-                    case "MARK": //email deserialization
-                        break;
-                    case "SEND": //email deserialization - dont think it sends
-                        Email newEmail = new Email();
+                }
+                    case "LOGIN":
+                        {
+                            LoginAttempt Attempt = new LoginAttempt();
+                            Attempt = deserializer(Attempt,dataReceived);
+                            Console.WriteLine("\n Accountname Attempt: " + Attempt.UserName);
+                            Console.WriteLine("\n Password attempt: " + Attempt.Password);
+                              
+                            string InfoList = dbdir + @"\UserName.txt";
+                            if (!File.Exists(InfoList)){ //If UserName.txt does not exist, make it. 
+                                using (StreamWriter sw = File.CreateText(InfoList))
+                                {
+                                    sw.Flush();
+                                    sw.Close();
+                                }
+                            }
+                            using (var sr = new StreamReader(InfoList))  //Open UserName.txt
+                            {
+                                string Decrypt = Attempt.Password; //Encrypts the password to check against the one in storage
+                                while (!sr.EndOfStream)
+                                {
+                                    var line = sr.ReadLine();
+                                    string[] words = line.Split(',');
+                                    if (String.IsNullOrEmpty(line)) continue;
+                                    if (words[0].IndexOf(Attempt.UserName, StringComparison.CurrentCultureIgnoreCase) >= 0 && words[1].IndexOf(Decrypt, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                                    // if string  is found, return +1   if not return -1, if empty return 0
+                                    {
+                                        Console.WriteLine("Successfull login!");
+                                        /*
+                                        userID = UserID.Text;
+                                        Inbox inbox = new Inbox();            // show the next window
+                                        inbox.Show();
+                                        this.Hide();
+                                        */
+                                        //return;
+                                    }
+                                    else { Console.WriteLine("Error logging in!"); }
+                                }
+                                
+                                //MessageBox.Show("Wrong user name or password, create a new user name");
+                            }
+                            break;
+                        }
+                    case "MARK":
+                        {
+                            
+                            //email deserialization
+                            break;
+                        }
+                    case "SEND": //DONE?
+                        { //email deserialization - note sure if it sends lmao
+                            Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
@@ -233,16 +290,28 @@ namespace Server
 
                         //newEmail.sendEmail(USER);
                         break;
-                    case "FORWARD": //email deserialization
+                        }
+                    case "FORWARD":
+                        { //email deserialization
+                            break;
+                        }
+                    case "REPLY":
+                        { //email deserialization
+                            break;
+                        }
+                    case "UPDATEINBOX":
+                        { 
+                            //inbox deserialization
                         break;
-                    case "REPLY": //email deserialization
+                        }
+                    case "DELETE":
+                        { //email deserialization
                         break;
-                    case "UPDATEINBOX": //inbox deserialization
-                        break;
-                    case "DELETE": //email deserialization
-                        break;
-                    case "DRAFT": //email deserialization
-                        break;
+                        }
+                    case "DRAFT": 
+                        { //email deserialization
+                            break;
+                        }
                     default:
                         break;
                 }
@@ -251,10 +320,22 @@ namespace Server
 
                 //---something important---
                 //Writing back to client
-                byte[] testing = Encoding.ASCII.GetBytes("Are you receiving this message?");
-                nwStream.Write(buffer, 0, testing.Length);
+
+                //buffer = new byte[client.ReceiveBufferSize];
+                /*byte[] ReturnBytesToRead = new byte[client.ReceiveBufferSize]; 
+                Encoding.ASCII.GetBytes("Are you receiving this message?");
+                nwStream.Write(buffer, 0, testing.Length); 
+                */
+                /*
+                string plswork = "HIMYM";
+                Console.WriteLine("sending back:" + plswork);
+                nwStream.Write(buffer, 0, bytesRead); */
+                //IDEA IS:
+                // tcp client + listener for client -> server
+                // seperate tcp client + listener for server->client
                 client.Close();
-                listener.Stop();
+                CTSlistener.Stop(); 
+
            }
         }
     }
