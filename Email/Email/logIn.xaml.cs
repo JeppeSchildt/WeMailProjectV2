@@ -47,7 +47,7 @@ namespace CLIENT
             dbdir = currentdir;
             //MessageBox.Show("LOCATION: \n" +dbdir);
             //TESTING FUNCTION:
-            //MessageBox.Show(dbdir);
+            MessageBox.Show(dbdir);
         }
 
         public static string userID;

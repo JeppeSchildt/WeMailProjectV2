@@ -22,7 +22,7 @@ namespace CLIENT
         {
 
             
-            using (var sr = new StreamReader("S:/Email/Email/Users/" + LogIn.userID + "/sent/" + Write.subjectMatter + ".txt"))  // read the directry of the userid and password
+            using (var sr = new StreamReader(LogIn.dbdir +"/ Users/" + LogIn.userID + "/sent/" + Write.subjectMatter + ".txt"))  // read the directry of the userid and password
             {
 
                 while (!sr.EndOfStream) {
