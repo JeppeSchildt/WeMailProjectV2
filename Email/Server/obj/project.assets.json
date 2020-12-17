@@ -8,23 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\chris\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Jeppe\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "S:\\Email\\Email\\Server\\Server.csproj",
+      "projectUniqueName": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailV2\\Email\\Server\\Server.csproj",
       "projectName": "Server",
-      "projectPath": "S:\\Email\\Email\\Server\\Server.csproj",
-      "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
-      "outputPath": "S:\\Email\\Email\\Server\\obj\\",
+      "projectPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailV2\\Email\\Server\\Server.csproj",
+      "packagesPath": "C:\\Users\\Jeppe\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailV2\\Email\\Server\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Jeppe\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

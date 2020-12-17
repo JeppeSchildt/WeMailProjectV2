@@ -105,7 +105,7 @@ namespace CLIENT
            // MessageBox.Show("Email Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public static void Wemailtransfer(MailAddress Sender, MailAddress Recipient, MailMessage message)
+        public static bool Wemailtransfer(MailAddress Sender, MailAddress Recipient, MailMessage message)
         {
             char DL = ''; //Possibly in need of changing, is not supported in TXT files. 
             try {
@@ -138,6 +138,7 @@ namespace CLIENT
             }
             catch (Exception ex) {
                 ExceptionHandler.SendMailException(ex);
+                return false;
             }
         }
     }

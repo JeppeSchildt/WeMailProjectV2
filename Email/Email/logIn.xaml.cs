@@ -23,9 +23,30 @@ namespace CLIENT
     /// </summary>
     public partial class LogIn : Window 
     {
+        public static string dbdir;
         public LogIn()
         {
-            InitializeComponent();   
+            InitializeComponent();
+            string currentdir = Environment.CurrentDirectory; //Gets location of exe file
+            MessageBox.Show(currentdir);
+            try
+            {
+                while (!(currentdir.EndsWith(@"\WeMailV2\Email")))
+                {
+                    currentdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"));
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error setting the Working Directory! \n" + @"Make sure your WeMailV2\Email\"+"\nDirectory is working and named as such! ");
+            }
+
+            // TESTING FUNCTION:
+            //MessageBox.Show("Error setting the Working Directory! \n" + "Make sure your: \n" + @"WeMailV2\Email\ Directory" + "\n is working and named as such! ");
+           
+            dbdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\")) + @"\UserName.txt"; //Location of UserName.txt
+            //TESTING FUNCTION:
+            //MessageBox.Show(dbdir);
         }
 
         public static string userID;
@@ -43,7 +64,7 @@ namespace CLIENT
 
         static string DecryptPass(string value)     // Decrypt function
         {
-
+            
             byte[] data = UTF8Encoding.UTF8.GetBytes(value);
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider()) {
                 byte[] keys = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(value));
@@ -58,24 +79,8 @@ namespace CLIENT
 
         private void logIn_Click(object sender, RoutedEventArgs e)
         {
-            string currentdir = Environment.CurrentDirectory;
-            MessageBox.Show(currentdir);
-            try
-            {
-                while (!(currentdir.EndsWith(@"\WeMailV2\Email")))
-                {
-                    currentdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"));
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Error setting the Working Directory! \n" + @"Make sure your WeMailV2\Email\ Directory is working and named as such! ");
-            }
-
-            MessageBox.Show("Error setting the Working Directory! \n" + "Make sure your: \n" +@"WeMailV2\Email\ Directory" + "\n is working and named as such! ");
-            string dbdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"))+@"\UserName.txt";
-            MessageBox.Show(dbdir);
-            string InfoList = @"C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\UserName.txt"; //Location of shit
+            
+            string InfoList = dbdir; //Location of UserName.txt //Can be done smarter later
 
             if (!File.Exists(InfoList)) {
                 using (StreamWriter sw = File.CreateText(InfoList)) {
@@ -85,7 +90,7 @@ namespace CLIENT
             }
 
 
-            using (var sr = new StreamReader(@"C:\Users\Jeppe\Documents\GitHub\WeMailV2\Email\UserName.txt"))  // read the directry of the userid and password
+            using (var sr = new StreamReader(dbdir))  // read the directry of the userid and password
             {
                 string Decrypt = DecryptPass(Password.Password);
                 while (!sr.EndOfStream) {
@@ -109,9 +114,8 @@ namespace CLIENT
 
         public void Forgot_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Context the admin by call 52223396");    //  can be changed by insert the number and find the code automatecal
+            MessageBox.Show("Contact the admin by call: +4552223396");    //  can be changed by insert the number and find the code automatecal
         }
-
         public void Create_Click(object sender, RoutedEventArgs e)
         {
             
