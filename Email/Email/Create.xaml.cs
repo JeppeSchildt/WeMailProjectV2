@@ -14,11 +14,12 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.IO;
-
+using System.Net.Sockets;
+using System.Net.Mail;
+using System.Xml.Serialization;
 
 namespace CLIENT
-{   
-    public partial class Create : Window
+{   public partial class Create : Window
     {
         public Create()
         {
@@ -35,16 +36,6 @@ namespace CLIENT
             int code = GetIntAValue();
             Label1.Content = code;
         }
-
-        /*static string Encrypt(string value)                       // An other encrypt but can't decrypt
-        {
-            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider()) 
-            {
-                UTF8Encoding utf8 = new UTF8Encoding();
-                byte[] data = md5.ComputeHash(utf8.GetBytes(value));
-                return Convert.ToBase64String(data);
-            }
-        }*/
 
         public string EncryptPass(string value)         // Encrypt function
         {
@@ -73,33 +64,68 @@ namespace CLIENT
 
         public void Done_Click(object sender, RoutedEventArgs e)
         {
-
             int code = GetIntAValue();
-
             if (CUserName.Text == "" || CPassword.Text == "" || Tlf.Text == "")
             {
-                MessageBox.Show("miss information!");
+                MessageBox.Show("You're missing information!");
 
             }
-
             else if (Code.Text != "" + Label1.Content)
             {
                 MessageBox.Show("Wrong CAPTCHA");
             }
-           
-            else if (TlfValid() == false)
+       
+            else if (!(TlfValid())) //IF TLF returns false
             {
                 MessageBox.Show("Wrong Phone Number");
             }
-
-            else
+            else //If all information is okay
             {
+                char DL = '';
+                string UserName = CUserName.Text;
+                string CrypPassword = EncryptPass(CPassword.Text);
+                string TelephoneNr = Tlf.Text;
+                /////////////////////
+                /// SERIALISATION ///
+                /////////////////////
+                Console.WriteLine("Beginning Serialisation...\n");
+                const int PORT_NO = 5000;
+                const string LOCALHOST = "127.0.0.1";
+                TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
+                NetworkStream nwStream = tcpclient.GetStream();
+                UserAccount UserAcc = new UserAccount(UserName,CrypPassword,TelephoneNr);
+                Console.WriteLine("USER ACC CLIENT SIDE;"+UserAcc.UserName);
+                XmlSerializer xmlSerializer = new XmlSerializer(UserAcc.GetType());
+                StringWriter stringified = new StringWriter();
+                xmlSerializer.Serialize(stringified, UserAcc);
+                string res = LogIn.userID + DL + "CREATEUSER" + DL + stringified.ToString();
+                byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
+                Console.WriteLine("Sending : " + res);
+                nwStream.Write(bytesToSend, 0, bytesToSend.Length);
+
+
+                //---read back the text---
+                byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
+                int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
+                //string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
+
+                //gets return signal but needs return class aswell.. check serialization
+                MessageBox.Show("Succes GGGL: " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
+                tcpclient.Close();
+
+                ////////////////////////////
+                /// END-OF-SERIALISATION ///
+                ///////////////////////////
+
                 Done.IsEnabled = false;
                 Done.Content = "finish";
+                
+
                 StreamWriter sw = new StreamWriter(LogIn.dbdir+@"\UserName.txt", true);
                 //MessageBox.Show("ALX:"+LogIn.dbdir);
                 string dir = LogIn.dbdir+@"\Users\"+CUserName.Text;
                 // If directory does not exist, create it
+                
                 if (!(Directory.Exists(dir))) {
                     Directory.CreateDirectory(dir);
                     
@@ -112,12 +138,13 @@ namespace CLIENT
                     Directory.CreateDirectory(draftsPath);
                 }
 
-                string CrypPassword = EncryptPass(CPassword.Text);
+                //string CrypPassword = EncryptPass(CPassword.Text);
+                
+                
                 sw.WriteLine(CUserName.Text + "," + CrypPassword+ "," + Tlf.Text);
                 sw.Flush();
                 sw.Close();
                 this.Close();
-
                 /* You could loop all of your window, and then check if it is hidden,
                  and then you could show it again, refer to below code snippet:    */
                 foreach (Window window in App.Current.Windows)
@@ -129,7 +156,6 @@ namespace CLIENT
                 }
             }         
         }
-
         private void CUserName_GotFocus(object sender, RoutedEventArgs e)
         {
             if (CUserName.Text == "User Name")
@@ -155,10 +181,7 @@ namespace CLIENT
         }
 
         private void Text_changed(object sender, TextChangedEventArgs e)
-
         {
-
-
             if (CUserName != null && CPassword != null && Tlf != null)
             {
                 if (CUserName.Text != "" && CPassword.Text != "" && Tlf.Text != "" && CUserName.Text != "User Name" && CPassword.Text != "Password" && Tlf.Text != "Tlf")
@@ -166,4 +189,20 @@ namespace CLIENT
             }
         }  
     }
+    public class UserAccount
+    {
+        public string UserName, PassWord, PhoneNumber;
+        public UserAccount() { }
+        public UserAccount(string UN, string Pass, string TLF)
+        {
+            UserName = UN;
+            PassWord = Pass;
+            PhoneNumber = TLF;
+
+        }
+    }
+
 }
+
+
+

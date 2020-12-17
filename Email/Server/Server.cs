@@ -16,6 +16,18 @@ public class User
     public string username, password;
     public List<EmailFolder> userEmailFolders;
 }
+public class UserAccount
+{
+    public string UserName, PassWord, PhoneNumber;
+    public UserAccount() { }
+    public UserAccount(string UN, string Pass, string TLF)
+    {
+        UserName = UN;
+        PassWord = Pass;
+        PhoneNumber = TLF;
+
+    }
+}
 public class EmailFolder
 {
     public string folderType;
@@ -53,7 +65,6 @@ public class Email
 
     public bool deleteEmail()
     {
-
         bool success = true;
         return success == true;
     }
@@ -106,6 +117,7 @@ public class Email
 
 namespace Server
 {
+
     class Server
     {
         const int PORT_NO = 5000;
@@ -140,7 +152,7 @@ namespace Server
                 listener.Start();
                 //---incoming client connected---
                 TcpClient client = listener.AcceptTcpClient();
-
+             
                 //---get the incoming data through a network stream---
                 NetworkStream nwStream = client.GetStream();
                 byte[] buffer = new byte[client.ReceiveBufferSize];
@@ -149,31 +161,49 @@ namespace Server
                 int bytesRead = nwStream.Read(buffer, 0, client.ReceiveBufferSize);
                 string dataReceived = Encoding.UTF8.GetString(buffer, 0, bytesRead);
                 //---convert the data received into a string---
-                string USER = dataReceived.Substring(0, dataReceived.IndexOf(''));
+                string USER = dataReceived.Substring(0, dataReceived.IndexOf('')); //USER REQUESTING
                 dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
-                string REQ = dataReceived.Substring(0, dataReceived.IndexOf(''));
+                string REQ = dataReceived.Substring(0, dataReceived.IndexOf('')); //REQUEST 
                 dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
 
-                Email receivedEmail = new Email();
-                XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
+                //Email receivedEmail = new Email();
+                UserAccount useraccount = new UserAccount();
+                //XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
+                XmlSerializer xmlSerializer = new XmlSerializer(useraccount.GetType());
+
                 StringReader stringified = new StringReader(dataReceived);
-                receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
+                //receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
+                useraccount = (UserAccount)xmlSerializer.Deserialize(stringified);
                 Console.WriteLine("sending return");
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);
-                
-                
+
+                /*
                 Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
                 Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
                 Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
                 Console.WriteLine("\n Content: " + receivedEmail.contentText);
-
-
+                */
+                Console.WriteLine("\n Account:: " + useraccount.UserName);
+                Console.WriteLine("\n Pass:: " + useraccount.PassWord);
+                Console.WriteLine("\n PhoneNumber:: " + useraccount.PhoneNumber);
+               // Console.WriteLine("\n Content: " + receivedEmail.contentText);
                 //requestHandler(USER, REQ, dataReceived);
 
                 //---request handling---
                 switch (REQ) {
                     case "CREATEUSER": //user deserialization
+                        Console.WriteLine("REQ: CREATE USER BIG NICE");
+
+
+
+                        //Client needs to:
+                        // Authenticate requirements regarding legality
+                        // Encrypt Password
+                        //
+                        //Server needs to: 
+                        // Do the folder shit
+                        // Add user to username txt
                         break;
                     case "LOGIN": //user deserialization
                         break;
@@ -182,11 +212,11 @@ namespace Server
                     case "SEND": //email deserialization
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);
+                        
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
-                        if (domain == "wemail.com")
+                        if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
-                            //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                             var reciver = newEmail.receiverAddress;
                             String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
 
@@ -202,11 +232,10 @@ namespace Server
                         }
                         else
                         {
-                            receivedEmail.Send();
+                            //receivedEmail.Send();
                             //store in senders sent
                             Write.Files(newEmail);
                             Write.read(newEmail);
-
                         }
 
                         //newEmail.sendEmail(USER);
