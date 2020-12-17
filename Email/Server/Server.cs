@@ -165,60 +165,47 @@ namespace Server
                 dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
                 string REQ = dataReceived.Substring(0, dataReceived.IndexOf('')); //REQUEST 
                 dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
-
-                //Email receivedEmail = new Email();
-
-                //XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
-                UserAccount useraccount = new UserAccount();
-                //create object, pass along with datarecieved type
-                //how do i get object back
-                /*
-                XmlSerializer xmlSerializer = new XmlSerializer(useraccount.GetType());
-                StringReader stringified = new StringReader(dataReceived);
-                */
-                useraccount = deserializer(useraccount,dataReceived); //Updates useraccount
-
-                //receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
-                //X// useraccount = (UserAccount)xmlSerializer.Deserialize(stringified);
                 Console.WriteLine("sending return");
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);
 
-                /*
-                Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
-                Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
-                Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
-                Console.WriteLine("\n Content: " + receivedEmail.contentText);
-                */
-                Console.WriteLine("\n Account:: " + useraccount.UserName);
-                Console.WriteLine("\n Pass:: " + useraccount.PassWord);
-                Console.WriteLine("\n PhoneNumber:: " + useraccount.PhoneNumber);
-               // Console.WriteLine("\n Content: " + receivedEmail.contentText);
-                //requestHandler(USER, REQ, dataReceived);
+
 
                 //---request handling---
                 switch (REQ) {
                     case "CREATEUSER": //user deserialization
                         Console.WriteLine("REQ: CREATE USER BIG NICE");
+                        UserAccount useraccount = new UserAccount();
+                        useraccount = deserializer(useraccount, dataReceived);
+                        Console.WriteLine("\n Account:: " + useraccount.UserName);
+                        Console.WriteLine("\n Pass:: " + useraccount.PassWord);
+                        Console.WriteLine("\n PhoneNumber:: " + useraccount.PhoneNumber);
+                        Console.WriteLine("DATABASE DIRECTORY: " +dbdir);
+                        StreamWriter sw = new StreamWriter(dbdir + @"\UserName.txt", true);
+                        string dir = dbdir + @"\Users\" + useraccount.UserName;
+                        if (!(Directory.Exists(dir)))
+                        {
+                            Directory.CreateDirectory(dir);
 
+                            string inboxPath = dir + "/inbox";
+                            string sentPath = dir + "/sent";
+                            string draftsPath = dir + "/drafts";
 
-
-                        //Client needs to:
-                        // Authenticate requirements regarding legality
-                        // Encrypt Password
-                        //
-                        //Server needs to: 
-                        // Do the folder shit
-                        // Add user to username txt
+                            Directory.CreateDirectory(inboxPath);
+                            Directory.CreateDirectory(sentPath);
+                            Directory.CreateDirectory(draftsPath);
+                        }
+                        sw.WriteLine(useraccount.UserName + "," + useraccount.PassWord + "," + useraccount.PhoneNumber);
+                        sw.Flush();
+                        sw.Close();
                         break;
                     case "LOGIN": //user deserialization
                         break;
                     case "MARK": //email deserialization
                         break;
-                    case "SEND": //email deserialization
+                    case "SEND": //email deserialization - dont think it sends
                         Email newEmail = new Email();
-                        newEmail = deserializer(newEmail, dataReceived);
-                        
+                        newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))

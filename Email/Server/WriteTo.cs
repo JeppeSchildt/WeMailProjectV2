@@ -10,8 +10,8 @@ namespace Server
     
     public class Write
     {
-        public static string dbdir;
-        public static void Loca()
+        public static string dbdir = Loca();
+        public static string Loca()
         {
             
             string currentdir = Environment.CurrentDirectory; //Gets location of exe file
@@ -25,7 +25,7 @@ namespace Server
             catch {
                 Console.WriteLine(currentdir);
             }
-            dbdir = currentdir;
+            return dbdir = currentdir;
         }
 
         public static void Files(Email inputEmail)

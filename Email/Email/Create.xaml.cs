@@ -93,8 +93,7 @@ namespace CLIENT
                 const string LOCALHOST = "127.0.0.1";
                 TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
                 NetworkStream nwStream = tcpclient.GetStream();
-                UserAccount UserAcc = new UserAccount(UserName,CrypPassword,TelephoneNr);
-                Console.WriteLine("USER ACC CLIENT SIDE;"+UserAcc.UserName);
+                UserAccount UserAcc = new UserAccount(UserName,CrypPassword,TelephoneNr);       
                 XmlSerializer xmlSerializer = new XmlSerializer(UserAcc.GetType());
                 StringWriter stringified = new StringWriter();
                 xmlSerializer.Serialize(stringified, UserAcc);
@@ -110,7 +109,7 @@ namespace CLIENT
                 //string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
 
                 //gets return signal but needs return class aswell.. check serialization
-                MessageBox.Show("Succes GGGL: " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
+                MessageBox.Show(Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
                 tcpclient.Close();
 
                 ////////////////////////////
@@ -119,32 +118,8 @@ namespace CLIENT
 
                 Done.IsEnabled = false;
                 Done.Content = "finish";
-                
 
-                StreamWriter sw = new StreamWriter(LogIn.dbdir+@"\UserName.txt", true);
-                //MessageBox.Show("ALX:"+LogIn.dbdir);
-                string dir = LogIn.dbdir+@"\Users\"+CUserName.Text;
-                // If directory does not exist, create it
-                
-                if (!(Directory.Exists(dir))) {
-                    Directory.CreateDirectory(dir);
-                    
-                    string inboxPath = dir + "/inbox";
-                    string sentPath = dir + "/sent";
-                    string draftsPath = dir + "/drafts";
-                    
-                    Directory.CreateDirectory(inboxPath);
-                    Directory.CreateDirectory(sentPath);
-                    Directory.CreateDirectory(draftsPath);
-                }
-
-                //string CrypPassword = EncryptPass(CPassword.Text);
-                
-                
-                sw.WriteLine(CUserName.Text + "," + CrypPassword+ "," + Tlf.Text);
-                sw.Flush();
-                sw.Close();
-                this.Close();
+                this.Close(); //NEEDS TO ONLY CLOSE WHEN RECIEVING SUCCESS SIGNAL
                 /* You could loop all of your window, and then check if it is hidden,
                  and then you could show it again, refer to below code snippet:    */
                 foreach (Window window in App.Current.Windows)
