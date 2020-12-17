@@ -96,11 +96,11 @@ namespace CLIENT
             {
                 Done.IsEnabled = false;
                 Done.Content = "finish";
-                StreamWriter sw = new StreamWriter(LogIn.dbdir, true);
-
-                string dir = LogIn.dbdir +@"\" + CUserName.Text;
+                StreamWriter sw = new StreamWriter(LogIn.dbdir+@"\UserName.txt", true);
+                //MessageBox.Show("ALX:"+LogIn.dbdir);
+                string dir = LogIn.dbdir+@"\Users\"+CUserName.Text;
                 // If directory does not exist, create it
-                if (!Directory.Exists(dir)) {
+                if (!(Directory.Exists(dir))) {
                     Directory.CreateDirectory(dir);
                     
                     string inboxPath = dir + "/inbox";

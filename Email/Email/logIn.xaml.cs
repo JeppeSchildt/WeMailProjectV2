@@ -28,24 +28,24 @@ namespace CLIENT
         {
             InitializeComponent();
             string currentdir = Environment.CurrentDirectory; //Gets location of exe file
-            MessageBox.Show(currentdir);
+            //MessageBox.Show(currentdir);
             try
             {
                 while (!(currentdir.EndsWith(@"\WeMailProjectV2\Email")))
                 {
                     currentdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\"));
+                   // MessageBox.Show(currentdir);
                 }
             }
             catch
             {
                 MessageBox.Show("Error setting the Working Directory! \n" + @"Make sure your WeMailV2\Email\"+"\nDirectory is working and named as such! ");
             }
-            MessageBox.Show("chris"+currentdir);
             // TESTING FUNCTION:
             //MessageBox.Show("Error setting the Working Directory! \n" + "Make sure your: \n" + @"WeMailV2\Email\ Directory" + "\n is working and named as such! ");
 
-            //dbdir = currentdir.Substring(0, currentdir.LastIndexOf(@"\")) + @"\UserName.txt"; //Location of UserName.txt
             dbdir = currentdir;
+            //MessageBox.Show("LOCATION: \n" +dbdir);
             //TESTING FUNCTION:
             //MessageBox.Show(dbdir);
         }
@@ -81,8 +81,8 @@ namespace CLIENT
         private void logIn_Click(object sender, RoutedEventArgs e)
         {
             
-            string InfoList = dbdir; //Location of UserName.txt //Can be done smarter later
-
+            string InfoList = dbdir+@"\UserName.txt"; //Location of UserName.txt //Can be done smarter later
+            MessageBox.Show("info: \n" + InfoList);
             if (!File.Exists(InfoList)) {
                 using (StreamWriter sw = File.CreateText(InfoList)) {
                     sw.Flush();
@@ -91,7 +91,7 @@ namespace CLIENT
             }
 
 
-            using (var sr = new StreamReader(dbdir))  // read the directry of the userid and password
+            using (var sr = new StreamReader(InfoList))  // read the directry of the userid and password
             {
                 string Decrypt = DecryptPass(Password.Password);
                 while (!sr.EndOfStream) {
