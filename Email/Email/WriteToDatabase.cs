@@ -41,7 +41,7 @@ namespace CLIENT
       
         public static void Files ()
         {
-            StreamWriter sw = new StreamWriter("S:/Email/Email/Users/" + LogIn.userID + "/sent/" + subjectMatter + ".txt", true);
+            StreamWriter sw = new StreamWriter(LogIn.dbdir +"/ Users/" + LogIn.userID + "/sent/" + subjectMatter + ".txt", true);
             sw.WriteLine(emailType + "," + senderAddress + "," + receiverAddress + "," +timeStamp + "," + newContentText + ","
                 + oldContentText + "," + emailFlag );
             sw.Flush();
@@ -50,7 +50,7 @@ namespace CLIENT
 
         public static void read()
         {
-            using (var sr = new StreamReader("S:/Email/Email/Users/" + LogIn.userID +"/sent/" + subjectMatter+ ".txt"))  // read the directry of the userid and password
+            using (var sr = new StreamReader(LogIn.dbdir +"/Users/" + LogIn.userID +"/sent/" + subjectMatter+ ".txt"))  // read the directry of the userid and password
             {
                 while (!sr.EndOfStream) {
                     var line = sr.ReadLine();

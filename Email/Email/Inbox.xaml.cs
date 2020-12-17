@@ -25,7 +25,7 @@ namespace CLIENT
 
         public static List<string> FindSent()               // function to fund the mails under sent folder and store in the list
         {
-            string path = "S:/Email/Email/Users/" + LogIn.userID+"/sent";
+            string path = LogIn.dbdir + "/Users/" + LogIn.userID+"/sent";
             string[] extensions = { ".txt" };
             
             var files = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
