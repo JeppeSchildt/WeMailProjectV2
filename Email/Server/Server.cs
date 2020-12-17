@@ -167,13 +167,19 @@ namespace Server
                 dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
 
                 //Email receivedEmail = new Email();
-                UserAccount useraccount = new UserAccount();
-                //XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
-                XmlSerializer xmlSerializer = new XmlSerializer(useraccount.GetType());
 
+                //XmlSerializer xmlSerializer = new XmlSerializer(receivedEmail.GetType());
+                UserAccount useraccount = new UserAccount();
+                //create object, pass along with datarecieved type
+                //how do i get object back
+                /*
+                XmlSerializer xmlSerializer = new XmlSerializer(useraccount.GetType());
                 StringReader stringified = new StringReader(dataReceived);
+                */
+                useraccount = deserializer(useraccount,dataReceived); //Updates useraccount
+
                 //receivedEmail = (Email)xmlSerializer.Deserialize(stringified);
-                useraccount = (UserAccount)xmlSerializer.Deserialize(stringified);
+                //X// useraccount = (UserAccount)xmlSerializer.Deserialize(stringified);
                 Console.WriteLine("sending return");
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);

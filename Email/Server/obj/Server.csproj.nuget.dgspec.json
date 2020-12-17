@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj": {}
+    "C:\\Users\\kampfvagen\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj": {
+    "C:\\Users\\kampfvagen\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
+        "projectUniqueName": "C:\\Users\\kampfvagen\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
-        "packagesPath": "C:\\Users\\Jeppe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\obj\\",
+        "projectPath": "C:\\Users\\kampfvagen\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
+        "packagesPath": "C:\\Users\\kampfvagen\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kampfvagen\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Jeppe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\kampfvagen\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -52,7 +52,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
