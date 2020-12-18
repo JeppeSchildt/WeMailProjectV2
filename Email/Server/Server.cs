@@ -297,7 +297,9 @@ namespace Server
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
-                            //receivedEmail.Send();
+
+                             // receivedEmail.Send();
+
                                
                             //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                             var reciver = newEmail.receiverAddress;
