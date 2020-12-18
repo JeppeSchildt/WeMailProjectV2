@@ -178,12 +178,12 @@ namespace Server
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);
                 
-                
+                /*
                 Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
                 Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
                 Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
                 Console.WriteLine("\n Content: " + receivedEmail.contentText);
-                
+                */
                 //requestHandler(USER, REQ, dataReceived);  
 
                 //---request handling---
@@ -273,7 +273,7 @@ namespace Server
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
-                            receivedEmail.Send();
+                  //          receivedEmail.Send();
                                
                             //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                             var reciver = newEmail.receiverAddress;

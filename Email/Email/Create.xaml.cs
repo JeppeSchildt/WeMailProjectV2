@@ -39,7 +39,10 @@ namespace CLIENT
 
         public string EncryptPass(string value)         // Encrypt function
         {
-            byte[] data = UTF8Encoding.UTF8.GetBytes(CPassword.Text);
+
+            //         <TextBox x:Name="CPassword" HorizontalAlignment="Left" Height="23" Margin="99,110,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="120" GotFocus="CPassword_GotFocus" TextChanged="Text_changed"/>
+
+            byte[] data = UTF8Encoding.UTF8.GetBytes(CPassword.Password);
             using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider()) {
                 byte[] keys = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(value));
                 using (TripleDESCryptoServiceProvider tripDes = new TripleDESCryptoServiceProvider() { Key = keys, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 }) {
@@ -65,7 +68,7 @@ namespace CLIENT
         public void Done_Click(object sender, RoutedEventArgs e)
         {
             int code = GetIntAValue();
-            if (CUserName.Text == "" || CPassword.Text == "" || Tlf.Text == "")
+            if (CUserName.Text == "" || CPassword.Password == "" || Tlf.Text == "")
             {
                 MessageBox.Show("You're missing information!");
 
@@ -83,7 +86,7 @@ namespace CLIENT
             {
                 char DL = '';
                 string UserName = CUserName.Text;
-                string CrypPassword = EncryptPass(CPassword.Text);
+                string CrypPassword = EncryptPass(CPassword.Password);
                 string TelephoneNr = Tlf.Text;
                 /////////////////////
                 /// SERIALISATION ///
@@ -141,9 +144,9 @@ namespace CLIENT
 
         private void CPassword_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (CPassword.Text != null)
+            if (CPassword.Password != null)
             {
-                CPassword.Text = null;
+                CPassword.Password = null;
             }
         }
 
@@ -159,7 +162,7 @@ namespace CLIENT
         {
             if (CUserName != null && CPassword != null && Tlf != null)
             {
-                if (CUserName.Text != "" && CPassword.Text != "" && Tlf.Text != "" && CUserName.Text != "User Name" && CPassword.Text != "Password" && Tlf.Text != "Tlf")
+                if (CUserName.Text != "" && CPassword.Password != "" && Tlf.Text != "" && CUserName.Text != "User Name" && CPassword.Password != "Password" && Tlf.Text != "Tlf")
                     CAPTCHA();
             }
         }  

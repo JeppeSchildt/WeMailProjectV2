@@ -12,11 +12,13 @@
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
         <TextBox x:Name="CUserName" HorizontalAlignment="Left" Height="23" Margin="99,47,0,0" TextWrapping="Wrap" Text="User Name" VerticalAlignment="Top" Width="120" GotFocus="CUserName_GotFocus" TextChanged="Text_changed"/>
-        <TextBox x:Name="CPassword" HorizontalAlignment="Left" Height="23" Margin="99,110,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="120" GotFocus="CPassword_GotFocus" TextChanged="Text_changed"/>
+
+        <PasswordBox x:Name="CPassword" HorizontalAlignment="Left" Height="23" Margin="99,110,0,0"  Password="Password" VerticalAlignment="Top" Width="120" GotFocus="CPassword_GotFocus"/>
+
         <TextBox x:Name="Tlf" HorizontalAlignment="Left" Height="23" Margin="99,166,0,0" TextWrapping="Wrap" Text="Tlf" VerticalAlignment="Top" Width="120" GotFocus="Tlf_GotFocus" TextChanged="Text_changed"/>
-        <Button x:Name="Done" Content="Done" HorizontalAlignment="Left" Margin="111,239,0,0" VerticalAlignment="Top" Width="75" Click="Done_Click"/>
         <Label x:Name="Label1" Content="code" HorizontalAlignment="Left" Margin="239,206,0,0" VerticalAlignment="Top" IsEnabled="False"/>
         <TextBox x:Name="Code" HorizontalAlignment="Left" Height="23" Margin="99,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="Done" Content="Done" HorizontalAlignment="Left" Margin="111,239,0,0" VerticalAlignment="Top" Width="75" Click="Done_Click"/>
 
     </Grid>
 </Window>
