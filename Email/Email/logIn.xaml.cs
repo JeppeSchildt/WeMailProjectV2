@@ -26,6 +26,7 @@ namespace CLIENT
     /// </summary>
     public partial class LogIn : Window 
     {
+        public UserAccount CurrUser = new UserAccount();
         const int PORT_NO = 5000;
         const int PORT_N1 = 5001;
         const string LOCALHOST = "127.0.0.1";
@@ -116,7 +117,6 @@ namespace CLIENT
             Console.WriteLine("Yall?\n"+Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
             tcpclient.Close();
             //
-
             Console.WriteLine("Listening to server ay:");
             STClistener.Start();
             TcpClient STCclient = STClistener.AcceptTcpClient();
@@ -134,7 +134,18 @@ namespace CLIENT
             XmlSerializer xmls = new XmlSerializer(RT.GetType());
             StringReader returnclasstostring = new StringReader(datafromserver);
             RT = (ReturnClass)xmls.Deserialize(returnclasstostring);
+            Console.WriteLine("\n UserAccountID: " + RT.useracc.UserName);
+            Console.WriteLine("\n " + RT.success.ToString());
 
+             ///////////////
+            ///IMPORTANT///
+           ///////////////
+
+            CurrUser = RT.useracc; //IF SUCCESSFULL LOGIN - ADD CURR USER IS GIVEN
+             
+           ///////////////
+          ///IMPORTANT///
+         ///////////////
             if (RT.success == true)
             {
                 Inbox inbox = new Inbox();            // show the next window
@@ -169,6 +180,7 @@ namespace CLIENT
     {
         //Could do enum success/fail instead of bool. Not sure if needed though
         public Boolean success;
+        public UserAccount useracc = new UserAccount();
         // public Exception ex;
         public string exceptionstring; //Cannot XML serialize exception as it uses IDIRECTORY. DO ex.tostring instead.. 
         public ReturnClass() { }
@@ -176,6 +188,12 @@ namespace CLIENT
         {
             success = succ;
             exceptionstring = excep;
+        }
+        public ReturnClass(string excep, bool succ, UserAccount user)
+        {
+            success = succ;
+            exceptionstring = excep;
+            useracc = user;
         }
     }
     public class LoginAttempt 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -24,9 +23,19 @@ public class LoginAttempt
         Password = Pass;
     }
 }
+/*
+public class MarkRequest
+{
+    public string type;
+    public MarkRequest(){}
+    public MarkRequest(string t) {
+        type = t;
+            }
+} */
 public class UserAccount
 {
     public string UserName, PassWord, PhoneNumber;
+    public List<EmailFolder> userEmailFolders;
     public UserAccount() { }
     public UserAccount(string UN, string Pass, string TLF)
     {
@@ -35,7 +44,22 @@ public class UserAccount
         PhoneNumber = TLF;
 
     }
+    public class ReturnClass
+    {
+        //Could do enum success/fail instead of bool. Not sure if needed though
+        public Boolean success;
+        // public Exception ex;
+        public string exceptionstring; //Cannot XML serialize exception as it uses IDIRECTORY. DO ex.tostring instead.. 
+        public ReturnClass() { }
+        public ReturnClass(string excep, bool succ)
+        {
+            success = succ;
+            exceptionstring = excep;
+        }
+    }
 }
+
+
 public class EmailFolder
 {
     public string folderType;
@@ -43,28 +67,34 @@ public class EmailFolder
 
     public EmailFolder receiveFolder()
     {
-        // bool success; //currently not used
         EmailFolder emailFolderVar = new EmailFolder();
         return emailFolderVar;
         //return success == true; 
     }
 }
+
 public class ReturnClass
 {
     //Could do enum success/fail instead of bool. Not sure if needed though
     public Boolean success;
+    public UserAccount useracc = new UserAccount();
     // public Exception ex;
     public string exceptionstring; //Cannot XML serialize exception as it uses IDIRECTORY. DO ex.tostring instead.. 
     public ReturnClass() {}
-    public ReturnClass(string excep, bool succ) {
+    public ReturnClass(string excep, bool succ)
+    {
         success = succ;
         exceptionstring = excep;
+    }
+    public ReturnClass(string excep, bool succ,UserAccount user) {
+        success = succ;
+        exceptionstring = excep;
+        useracc = user;
     }
 }
 public class Email
 {
     public string emailType, senderAddress, receiverAddress, timeStamp, subjectMatter, contentText, emailFlag;
-    
     public Email() { }
     //remember s = string
     public Email(s inputEmailType, s inputSenderAddress, s inputReceiverAddress, s inputTimeStamp, s inputSubjectMatter, s inputContentText, s inputFlag)
@@ -77,7 +107,6 @@ public class Email
         contentText = inputContentText;
         emailFlag = inputFlag;
     }
-
     public bool deleteEmail()
     {
         bool success = true;
@@ -100,6 +129,8 @@ public class Email
     }
     public void Send() //Sends mail using SMTP
     {
+        //UserAccount.ReturnClass test = new UserAccount.ReturnClass();
+        
         MailAddress Recipient = new MailAddress(this.receiverAddress);
         MailAddress Sender = new MailAddress(this.senderAddress);
         MailMessage message = new MailMessage(Sender, Recipient);
@@ -132,7 +163,6 @@ public class Email
 
 namespace Server
 {
-
     class Server
     {
         const int PORT_N1 = 5001;
@@ -148,7 +178,6 @@ namespace Server
             desObj = (T)xmlSerializer.Deserialize(stringified);
             return desObj;
         }
-
         public static string serializer<T>(T sObj)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(sObj.GetType());
@@ -161,7 +190,6 @@ namespace Server
         {
             string dbdir = Write.dbdir;
             while (true) {
-
                 //---listen at the specified IP and port no.---
                 IPAddress localAdd = IPAddress.Parse(SERVER_IP);
                 TcpListener CTSlistener = new TcpListener(localAdd, PORT_NO);
@@ -169,7 +197,6 @@ namespace Server
                 CTSlistener.Start();
                 //---incoming client connected---
                 TcpClient client = CTSlistener.AcceptTcpClient();
-
                 //---get the incoming data through a network stream---
                 NetworkStream nwStream = client.GetStream();
                 byte[] buffer = new byte[client.ReceiveBufferSize];
@@ -187,14 +214,6 @@ namespace Server
                 //start STC client //
                 TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1); //error here
                 NetworkStream nwStreamSTC = STCclient.GetStream();
-                /*
-                Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
-                Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
-                Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
-                Console.WriteLine("\n Content: " + receivedEmail.contentText);
-                */
-                //requestHandler(USER, REQ, dataReceived);  
-
                 //---request handling---
                 switch (REQ) {
                     case "CREATEUSER": //DONE?
@@ -243,8 +262,9 @@ namespace Server
                             }
                         break;
                 }
-                    case "LOGIN": // C-> T & S-C WORKS
+                    case "LOGIN": // DONE ? - NEEDS TO RETURN USERCLASS
                         {
+                            Boolean found = false;
                             LoginAttempt Attempt = new LoginAttempt();
                             Attempt = deserializer(Attempt,dataReceived);
                             Console.WriteLine("\n Accountname Attempt: " + Attempt.UserName);
@@ -260,7 +280,6 @@ namespace Server
                             using (var sr = new StreamReader(InfoList))  //Open UserName.txt
                             {
                                 string Decrypt = Attempt.Password; //Encrypts the password to check against the one in storage
-                                Boolean found = false;
                                 while (!sr.EndOfStream)
                                 {
                                     var line = sr.ReadLine();
@@ -271,12 +290,8 @@ namespace Server
                                     {
                                         Console.WriteLine("Successfull login!");
                                         found = true;
-
-                                       
                                     }
                                     else { //return class of faults
-                                       
-                                        
                                         Console.WriteLine("Error logging in!");
                                       }
                                 }
@@ -287,14 +302,17 @@ namespace Server
                                     ////////////////
                                     ///
                                     Console.Write("SENDING TO CLIENT USING TCP");
-                                    ReturnClass rtn = new ReturnClass();
-                                    rtn.success = true;
-                                    rtn.exceptionstring = "This will be the exception";
-                                    string returnclassstring = serializer(rtn);
-                                    //string texttosend = "success"; //Needs to be the serialized return class
+                                    UserAccount usrtest = new UserAccount();
+                                    usrtest.UserName = "HenrikTisser";
+                                    ReturnClass returntest = new ReturnClass();
+                                    returntest.useracc = usrtest;
+                                    returntest.success = true;
+                                    returntest.exceptionstring = "";
+                                    string returnclassstring = serializer(returntest);
                                     byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                                     //SEND
                                     nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                    Console.WriteLine("Useraccount returned from server: ");
                                     STCclient.Close();
                                     ////////////////
                                     ///TCP - END /// 
@@ -302,26 +320,48 @@ namespace Server
                                 }
                                 else
                                 {
-                                    ReturnClass rtn = new ReturnClass();
-                                    rtn.success = false;
-                                    rtn.exceptionstring = "Some error..";
-                                    string returnclassstring = serializer(rtn);
-                                    // TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
-                                    // NetworkStream nwStreamSTC = STCclient.GetStream();
+                                    Console.Write("SENDING ERROR TO CLIENT USING TCP : L323");
+                                    UserAccount usrtest = new UserAccount();
+                                    usrtest.UserName = "Doughnut";
+                                    ReturnClass returntest = new ReturnClass("user not found",false,usrtest);
+                                    Console.Write("KOLORA:" + returntest.success.ToString());
+                                    /*
+                                    returntest.useracc = usrtest;
+                                    returntest.success = false;
+                                    returntest.exceptionstring = "User is not found";
+                                    */
+                                    string returnclassstring = serializer(returntest);
                                     byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                                     //SEND
                                     nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                    Console.WriteLine("Error message returned from server: ");
+                                    STCclient.Close();
+                                    /////////////////////////
                                 }
                             }
                             break;
                         }
-                    case "MARK":
-                        { 
-                            //email deserialization
+                    case "MARK": //UNREAD - READ - IMPORTANT
+                        {
+                            UserAccount usrtest = new UserAccount();
+                            usrtest.UserName = "HenrikTisser";
+                            ReturnClass returntest = new ReturnClass();
+                            returntest.useracc = usrtest;
+                            returntest.success = true;
+                            returntest.exceptionstring = "";
+                            string returnclassstring = serializer(returntest);
+                            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                            //SEND
+                            nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                            Console.WriteLine("Information was sent from MARK");
+                            STCclient.Close();
+                            // email deserialization
+                            // client sends user - request - flag to update
+                            // server updates, sends back 
                             break;
                         }
-                    case "SEND": //DONE?
-                        { //email deserialization - note sure if it sends lmao
+                    case "SEND":  //DONE ?
+                        { 
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
@@ -371,8 +411,7 @@ namespace Server
                         {
                             try
                                 {
-                                    newEmail.Send(); //Works?
-                                    //receivedEmail.Send();
+                                    newEmail.Send(); 
                                     //store in senders sent
                                     Write.Files(newEmail);
                                     Write.read(newEmail);
@@ -423,24 +462,6 @@ namespace Server
                     default:
                         break;
                 }
-                //---call requestHandler---
-                //requestHandler(USER, REQ, dataReceived);
-
-                //---something important---
-                //Writing back to client
-
-                //buffer = new byte[client.ReceiveBufferSize];
-                /*byte[] ReturnBytesToRead = new byte[client.ReceiveBufferSize]; 
-                Encoding.ASCII.GetBytes("Are you receiving this message?");
-                nwStream.Write(buffer, 0, testing.Length); 
-                */
-                /*
-                string plswork = "HIMYM";
-                Console.WriteLine("sending back:" + plswork);
-                nwStream.Write(buffer, 0, bytesRead); */
-                //IDEA IS:
-                // tcp client + listener for client -> server
-                // seperate tcp client + listener for server->client
                 STCclient.Close();
                 client.Close();
                 CTSlistener.Stop(); 
