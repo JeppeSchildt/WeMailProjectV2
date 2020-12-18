@@ -65,12 +65,14 @@ namespace CLIENT
         {
             if (UserID.Text == "User ID")
                 UserID.Text = "";
+            
         }
 
         public void Password_GotFocus(object sender, RoutedEventArgs e)
         {
             if (Password.Password == "Password")
                 Password.Password = "";
+            
         }
 
         static string EncryptPass(string value)     // Decrypt function
@@ -86,7 +88,19 @@ namespace CLIENT
                 }
             } 
         }
-        private void logIn_Click(object sender, RoutedEventArgs e)
+
+      
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (UserID.Text != "" && Password.Password != "") {
+
+                if (e.Key == Key.Enter) {
+                    logIn_Click(sender, e);
+                }
+            }
+        }
+        private void logIn_Click(object sender, RoutedEventArgs args)
         {
             
             char DL = '';
