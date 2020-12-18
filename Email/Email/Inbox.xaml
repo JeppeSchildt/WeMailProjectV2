@@ -9,7 +9,7 @@
     <Grid>
         <Button x:Name="SentFolder" Content="Sent folder" HorizontalAlignment="Left" Margin="204,167,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="SentFolder_Click"/>
         <Button x:Name="SendMail" Content="New Email" HorizontalAlignment="Left" Margin="365,167,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="NewEmail_Click"/>
-
+        <Button x:Name="MarkFunc" Content="Mark Function" HorizontalAlignment="Left" Margin="508,167,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="Mark_Click"/>
         <Label x:Name="Label1" Content="Click the buttom" HorizontalAlignment="Left" Margin="204,225,0,0" VerticalAlignment="Top" IsEnabled="False" Width="227"/>
         <Label x:Name="Label2" Content="Click the buttom" HorizontalAlignment="Left" Margin="204,272,0,0" VerticalAlignment="Top" IsEnabled="False" Width="227"/>
 

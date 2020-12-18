@@ -12,7 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
-
+using System.Net;
+using System.Net.Sockets;
+using System.Net.Mail;
+using System.Xml.Serialization;
 
 namespace CLIENT
 {
@@ -91,6 +94,36 @@ namespace CLIENT
 
             }
 
+
+        }
+        private void Mark_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("not implemented yet you impatient bastard");
+           
+            /*
+            //dummy function for mark
+            //send over 5000
+            const int PORT_NO = 5000;
+            const int PORT_N1 = 5001;
+            const string LOCALHOST = "127.0.0.1";
+            Console.WriteLine("Beginning Serialisation...\n");
+            TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO); //SEND ON PORT 5k
+            NetworkStream nwStream = tcpclient.GetStream();
+            IPAddress localaddress = IPAddress.Parse(LOCALHOST);
+            TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
+            */
+            /*
+            //Need someway to do userid.useraccount HIGH PRIO
+            UserAccount ua = new UserAccount();
+            XmlSerializer xmlSerializer = new XmlSerializer(loginattempt.GetType());
+            StringWriter stringified = new StringWriter();
+            xmlSerializer.Serialize(stringified, loginattempt);
+            string res = LogIn.userID + DL + "LOGIN" + DL + stringified.ToString(); //CHANGE BACK TO MARK
+            byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
+            Console.WriteLine("Sending : " + res);
+            nwStream.Write(bytesToSend, 0, bytesToSend.Length);
+            //listen on 5001
+            */
 
         }
     }
