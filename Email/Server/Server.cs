@@ -230,8 +230,7 @@ namespace Server
                                 Console.WriteLine("DATABASE DIRECTORY: " + dbdir);
                                 StreamWriter sw = new StreamWriter(dbdir + @"\UserName.txt", true);
                                 string dir = dbdir + @"\Users\" + useraccount.UserName;
-                                if (!(Directory.Exists(dir)))
-                                {
+                                if (!(Directory.Exists(dir))) {
                                     Directory.CreateDirectory(dir);
                                     string inboxPath = dir + "/inbox";
                                     string sentPath = dir + "/sent";
@@ -239,17 +238,29 @@ namespace Server
                                     Directory.CreateDirectory(inboxPath);
                                     Directory.CreateDirectory(sentPath);
                                     Directory.CreateDirectory(draftsPath);
+
+                                    sw.WriteLine(useraccount.UserName + "," + useraccount.PassWord + "," + useraccount.PhoneNumber);
+                                    sw.Flush();
+                                    sw.Close();
+                                    ReturnClass rtrn = new ReturnClass();
+                                    rtrn.success = true;
+                                    string returnclassstring = serializer(rtrn);
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                    //could close STC
                                 }
-                                sw.WriteLine(useraccount.UserName + "," + useraccount.PassWord + "," + useraccount.PhoneNumber);
-                                sw.Flush();
-                                sw.Close();
-                                ReturnClass rtrn = new ReturnClass();
-                                rtrn.success = true;
-                                string returnclassstring = serializer(rtrn);
-                                byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                //SEND
-                                nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                                //could close STC
+                                else 
+                                {
+                                    ReturnClass rtrn = new ReturnClass();
+                                    rtrn.success = false;
+                                    rtrn.exceptionstring = "Username is taken";
+
+                                    string returnclassstring = serializer(rtrn);
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                }
                             }
                             catch (Exception ex)
                             {

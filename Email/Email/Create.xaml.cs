@@ -85,6 +85,7 @@ namespace CLIENT
             }
             else //If all information is okay
             {
+                
                 char DL = '';
                 string UserName = CUserName.Text;
                 string CrypPassword = EncryptPass(CPassword.Password);
@@ -158,6 +159,8 @@ namespace CLIENT
                 else
                 {
                     MessageBox.Show("Error creating an account, please try again!");
+                    MessageBox.Show("User already exist !!!!!!!");
+
                 }
                 STCclient.Close();
                 STClistener.Stop();
