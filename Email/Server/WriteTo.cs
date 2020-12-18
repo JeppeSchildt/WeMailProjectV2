@@ -42,6 +42,20 @@ namespace Server
             sw.Close();
         }
 
+        public static void draft(Email inputEmail)
+        {
+            Loca();
+            String senderEmail = inputEmail.senderAddress;
+            String userID = senderEmail.Substring(0, senderEmail.IndexOf("@"));    // userID before @
+            Console.WriteLine("dbdir is:" + dbdir);
+
+            StreamWriter sw = new StreamWriter(dbdir + "/Users/" + userID + "/drafts/" + inputEmail.subjectMatter + ".txt", true);
+            sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
+                  inputEmail.contentText + "," + inputEmail.emailFlag);
+            sw.Flush();
+            sw.Close();
+        }
+
         public static void Files2(Email inputEmail)
         {
 

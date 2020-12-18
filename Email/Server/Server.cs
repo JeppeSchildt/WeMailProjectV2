@@ -326,7 +326,7 @@ namespace Server
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
-                        Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
+                        Console.WriteLine(domain);                        
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
                              // receivedEmail.Send();

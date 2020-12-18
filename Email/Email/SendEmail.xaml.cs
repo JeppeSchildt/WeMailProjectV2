@@ -78,6 +78,12 @@ namespace CLIENT
             inbox.Show();
             this.Hide();
         }
+
+        public void draft_Click(object sender, RoutedEventArgs e) //USER CLICKS SEND BUTTON
+        {
+         
+        }
+
     }
 
     public class Email

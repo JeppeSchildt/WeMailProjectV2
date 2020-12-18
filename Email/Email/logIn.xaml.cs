@@ -84,7 +84,7 @@ namespace CLIENT
                     Console.WriteLine(Convert.ToBase64String(results, 0, results.Length));
                     return Convert.ToBase64String(results, 0, results.Length);
                 }
-            }
+            } 
         }
         private void logIn_Click(object sender, RoutedEventArgs e)
         {

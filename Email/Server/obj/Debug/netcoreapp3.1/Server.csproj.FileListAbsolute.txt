@@ -30,7 +30,6 @@ S:\Email\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.runtimeconf
 S:\Email\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.dev.json
 S:\Email\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.dll
 S:\Email\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.pdb
-S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csprojAssemblyReference.cache
 S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfoInputs.cache
 S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfo.cs
 S:\Email\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csproj.CoreCompileInputs.cache
