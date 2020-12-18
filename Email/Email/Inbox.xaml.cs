@@ -75,5 +75,19 @@ namespace CLIENT
 
         }
 
+        private void delete_Click(object sender, RoutedEventArgs e)
+        {
+            var fil = FindSent();
+
+            if (fil.Count != 0)
+            File.Delete(fil[0]);
+            else {
+                MessageBox.Show("Folder is empty");
+
+            }
+
+
+        }
+
     }
 }

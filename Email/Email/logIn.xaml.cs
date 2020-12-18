@@ -86,6 +86,8 @@ namespace CLIENT
             string UserName = UserID.Text;
             string PassW = EncryptPass(Password.Password);
 
+            userID = UserName;
+
             /////////////////////
             /// SERIALISATION ///
             /////////////////////
