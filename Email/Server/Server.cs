@@ -411,7 +411,9 @@ namespace Server
                         {
                             try
                                 {
+
                                     newEmail.Send(); 
+
                                     //store in senders sent
                                     Write.Files(newEmail);
                                     Write.read(newEmail);
