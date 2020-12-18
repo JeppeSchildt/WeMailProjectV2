@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj": {}
+    "S:\\Email\\WeMailProjectV2\\Email\\Server\\Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj": {
+    "S:\\Email\\WeMailProjectV2\\Email\\Server\\Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
+        "projectUniqueName": "S:\\Email\\WeMailProjectV2\\Email\\Server\\Server.csproj",
         "projectName": "Server",
-        "projectPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
-        "packagesPath": "C:\\Users\\Jeppe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\obj\\",
+        "projectPath": "S:\\Email\\WeMailProjectV2\\Email\\Server\\Server.csproj",
+        "packagesPath": "C:\\Users\\chris\\.nuget\\packages\\",
+        "outputPath": "S:\\Email\\WeMailProjectV2\\Email\\Server\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Jeppe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\chris\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

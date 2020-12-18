@@ -14,5 +14,8 @@
         <Label x:Name="Label2" Content="Click the buttom" HorizontalAlignment="Left" Margin="204,272,0,0" VerticalAlignment="Top" IsEnabled="False" Width="227"/>
 
         <Label x:Name="Label3" Content="Click the buttom" HorizontalAlignment="Left" Margin="204,321,0,0" VerticalAlignment="Top" IsEnabled="False" Width="227"/>
+
+        <Button x:Name="delete" Content="Delete" HorizontalAlignment="Left" Margin="650,167,0,0" VerticalAlignment="Top" Width="116" Height="29" Click="delete_Click"/>
+
     </Grid>
 </Window>
