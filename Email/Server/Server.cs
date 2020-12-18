@@ -162,7 +162,6 @@ namespace Server
             string dbdir = Write.dbdir;
             while (true) {
 
-
                 //---listen at the specified IP and port no.---
                 IPAddress localAdd = IPAddress.Parse(SERVER_IP);
                 TcpListener CTSlistener = new TcpListener(localAdd, PORT_NO);
@@ -170,7 +169,7 @@ namespace Server
                 CTSlistener.Start();
                 //---incoming client connected---
                 TcpClient client = CTSlistener.AcceptTcpClient();
-             
+
                 //---get the incoming data through a network stream---
                 NetworkStream nwStream = client.GetStream();
                 byte[] buffer = new byte[client.ReceiveBufferSize];
@@ -185,7 +184,9 @@ namespace Server
                 Console.WriteLine("sending return");
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);
-                
+                //start STC client //
+                TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
+                NetworkStream nwStreamSTC = STCclient.GetStream();
                 /*
                 Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
                 Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
@@ -197,34 +198,53 @@ namespace Server
                 //---request handling---
                 switch (REQ) {
                     case "CREATEUSER": //DONE?
-                        { 
-                        //user deserialization
-                        Console.WriteLine("REQ: CREATE USER BIG NICE");
-                        UserAccount useraccount = new UserAccount();
-                        useraccount = deserializer(useraccount, dataReceived);
-                        Console.WriteLine("\n Account:: " + useraccount.UserName);
-                        Console.WriteLine("\n Pass:: " + useraccount.PassWord);
-                        Console.WriteLine("\n PhoneNumber:: " + useraccount.PhoneNumber);
-                        Console.WriteLine("DATABASE DIRECTORY: " + dbdir);
-                        StreamWriter sw = new StreamWriter(dbdir + @"\UserName.txt", true);
-                        string dir = dbdir + @"\Users\" + useraccount.UserName;
-                        if (!(Directory.Exists(dir)))
                         {
-                            Directory.CreateDirectory(dir);
+                            try
+                            {
+                                //user deserialization
+                                Console.WriteLine("REQ: CREATE USER BIG NICE");
+                                UserAccount useraccount = new UserAccount();
+                                useraccount = deserializer(useraccount, dataReceived);
+                                Console.WriteLine("\n Account:: " + useraccount.UserName);
+                                Console.WriteLine("\n Pass:: " + useraccount.PassWord);
+                                Console.WriteLine("\n PhoneNumber:: " + useraccount.PhoneNumber);
+                                Console.WriteLine("DATABASE DIRECTORY: " + dbdir);
+                                StreamWriter sw = new StreamWriter(dbdir + @"\UserName.txt", true);
+                                string dir = dbdir + @"\Users\" + useraccount.UserName;
+                                if (!(Directory.Exists(dir)))
+                                {
+                                    Directory.CreateDirectory(dir);
 
-                            string inboxPath = dir + "/inbox";
-                            string sentPath = dir + "/sent";
-                            string draftsPath = dir + "/drafts";
-                            Directory.CreateDirectory(inboxPath);
-                            Directory.CreateDirectory(sentPath);
-                            Directory.CreateDirectory(draftsPath);
-                        }
-                        sw.WriteLine(useraccount.UserName + "," + useraccount.PassWord + "," + useraccount.PhoneNumber);
-                        sw.Flush();
-                        sw.Close();
+                                    string inboxPath = dir + "/inbox";
+                                    string sentPath = dir + "/sent";
+                                    string draftsPath = dir + "/drafts";
+                                    Directory.CreateDirectory(inboxPath);
+                                    Directory.CreateDirectory(sentPath);
+                                    Directory.CreateDirectory(draftsPath);
+                                }
+                                sw.WriteLine(useraccount.UserName + "," + useraccount.PassWord + "," + useraccount.PhoneNumber);
+                                sw.Flush();
+                                sw.Close();
+                                ReturnClass rtrn = new ReturnClass();
+                                rtrn.success = true;
+                                string returnclassstring = serializer(rtrn);
+                                byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                //SEND
+                                nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                //could close STC
+                            }
+                            catch (Exception ex)
+                            {
+                                ReturnClass rtrn = new ReturnClass(ex.ToString(), false);
+                                string returnclassstring = serializer(rtrn);
+                                byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                //SEND
+                                nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                //could close STC
+                            }
                         break;
                 }
-                    case "LOGIN":
+                    case "LOGIN": // C-> T & S-C WORKS
                         {
                             LoginAttempt Attempt = new LoginAttempt();
                             Attempt = deserializer(Attempt,dataReceived);
@@ -241,6 +261,7 @@ namespace Server
                             using (var sr = new StreamReader(InfoList))  //Open UserName.txt
                             {
                                 string Decrypt = Attempt.Password; //Encrypts the password to check against the one in storage
+                                Boolean found = false;
                                 while (!sr.EndOfStream)
                                 {
                                     var line = sr.ReadLine();
@@ -250,40 +271,47 @@ namespace Server
                                     // if string  is found, return +1   if not return -1, if empty return 0
                                     {
                                         Console.WriteLine("Successfull login!");
-                                        //////////////////
-                                        ///TCP - START/// 
-                                        ////////////////
-                                        ///
-                                        Console.Write("SENDING TO CLIENT USING TCP");
-                                        ReturnClass rtn = new ReturnClass();
-                                        rtn.success = true;
-                                        rtn.exceptionstring = "This will be the exception";
-                                        string returnclassstring = serializer(rtn);
-                                        //string texttosend = "success"; //Needs to be the serialized return class
-                                        TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
-                                        NetworkStream nwStreamSTC = STCclient.GetStream();
-                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                        //SEND
-                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                                        STCclient.Close();
-                                        ////////////////
-                                        ///TCP - END /// 
-                                        ///////////////
+                                        found = true;
+
+                                       
                                     }
                                     else { //return class of faults
-                                        ReturnClass rtn = new ReturnClass();
-                                        rtn.success = false;
-                                        rtn.exceptionstring = "Some error..";
-                                        string returnclassstring = serializer(rtn); 
-                                        TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
-                                        NetworkStream nwStreamSTC = STCclient.GetStream();
-                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                        //SEND
-                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                                        STCclient.Close();
-                                        Console.WriteLine("Error logging in!");
+                                       
                                         
+                                        Console.WriteLine("Error logging in!");
                                       }
+                                }
+                                if (found)
+                                {
+                                    //////////////////
+                                    ///TCP - START/// 
+                                    ////////////////
+                                    ///
+                                    Console.Write("SENDING TO CLIENT USING TCP");
+                                    ReturnClass rtn = new ReturnClass();
+                                    rtn.success = true;
+                                    rtn.exceptionstring = "This will be the exception";
+                                    string returnclassstring = serializer(rtn);
+                                    //string texttosend = "success"; //Needs to be the serialized return class
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                    STCclient.Close();
+                                    ////////////////
+                                    ///TCP - END /// 
+                                    ///////////////
+                                }
+                                else
+                                {
+                                    ReturnClass rtn = new ReturnClass();
+                                    rtn.success = false;
+                                    rtn.exceptionstring = "Some error..";
+                                    string returnclassstring = serializer(rtn);
+                                    // TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
+                                    // NetworkStream nwStreamSTC = STCclient.GetStream();
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                                 }
                             }
                             break;
@@ -357,7 +385,7 @@ namespace Server
                 }
                 //---call requestHandler---
                 //requestHandler(USER, REQ, dataReceived);
-            
+
                 //---something important---
                 //Writing back to client
 
@@ -373,6 +401,7 @@ namespace Server
                 //IDEA IS:
                 // tcp client + listener for client -> server
                 // seperate tcp client + listener for server->client
+                STCclient.Close();
                 client.Close();
                 CTSlistener.Stop(); 
 

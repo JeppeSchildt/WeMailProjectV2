@@ -26,10 +26,17 @@ namespace CLIENT
     /// </summary>
     public partial class LogIn : Window 
     {
+        const int PORT_NO = 5000;
+        const int PORT_N1 = 5001;
+        const string LOCALHOST = "127.0.0.1";
+        static IPAddress localaddress = IPAddress.Parse(LOCALHOST);
+        static TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
+
         public static string dbdir;
         public LogIn()
         {
             InitializeComponent();
+
             string currentdir = Environment.CurrentDirectory; //Gets location of exe file
             //MessageBox.Show(currentdir);
             try
@@ -90,9 +97,6 @@ namespace CLIENT
             /// SERIALISATION ///
             /////////////////////
             Console.WriteLine("Beginning Serialisation...\n");
-            const int PORT_NO = 5000;
-            const int PORT_N1 = 5001;
-            const string LOCALHOST = "127.0.0.1";
             TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
             NetworkStream nwStream = tcpclient.GetStream();
             LoginAttempt loginattempt = new LoginAttempt(UserName, PassW);
@@ -107,11 +111,10 @@ namespace CLIENT
             //---read back the text---
             byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
             int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-            Console.WriteLine("Yall?\n"+Encoding.ASCII.GetString(bytesToRead, 0, bytesRead)); /* returnsignal*//*); //Recieves true if success, false if error. Should be changed to a exception if error later. 
-            */
+            Console.WriteLine("Yall?\n"+Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
             tcpclient.Close();
-            IPAddress localaddress = IPAddress.Parse(LOCALHOST);
-            TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
+            //
+
             Console.WriteLine("Listening to server ay:");
             STClistener.Start();
             TcpClient STCclient = STClistener.AcceptTcpClient();

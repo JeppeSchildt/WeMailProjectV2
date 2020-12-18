@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Net;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -93,7 +94,13 @@ namespace CLIENT
                 /////////////////////
                 Console.WriteLine("Beginning Serialisation...\n");
                 const int PORT_NO = 5000;
+                const int PORT_N1 = 5001;
                 const string LOCALHOST = "127.0.0.1";
+                //S TO C 
+                IPAddress localaddress = IPAddress.Parse(LOCALHOST);
+                TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
+                //C TO S
+
                 TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
                 NetworkStream nwStream = tcpclient.GetStream();
                 UserAccount UserAcc = new UserAccount(UserName,CrypPassword,TelephoneNr);       
@@ -104,35 +111,62 @@ namespace CLIENT
                 byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
                 Console.WriteLine("Sending : " + res);
                 nwStream.Write(bytesToSend, 0, bytesToSend.Length);
-
-
                 //---read back the text---
                 byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
                 int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-                //string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
 
-                //gets return signal but needs return class aswell.. check serialization
-                MessageBox.Show(Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
+  //              MessageBox.Show(Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
                 tcpclient.Close();
 
                 ////////////////////////////
                 /// END-OF-SERIALISATION ///
                 ///////////////////////////
+                //
+                //GET SIGNAL BACK FROM SERVER
+                //
+                Console.WriteLine("Listening to server on Create.Xaml.Cs:");
+                STClistener.Start();
+                TcpClient STCclient = STClistener.AcceptTcpClient();
 
-                Done.IsEnabled = false;
-                Done.Content = "finish";
-
-                this.Close(); //NEEDS TO ONLY CLOSE WHEN RECIEVING SUCCESS SIGNAL
-                /* You could loop all of your window, and then check if it is hidden,
-                 and then you could show it again, refer to below code snippet:    */
-                foreach (Window window in App.Current.Windows)
+                NetworkStream nwStreamFromServer = STCclient.GetStream();
+                byte[] serverbuffer = new byte[STCclient.ReceiveBufferSize];
+                //read
+                int bytesfromserver = nwStreamFromServer.Read(serverbuffer, 0, STCclient.ReceiveBufferSize);
+                //convert into string
+                string datafromserver = Encoding.ASCII.GetString(serverbuffer, 0, bytesfromserver);
+                Console.WriteLine("Info from server: " + datafromserver);
+                /////////////////////////
+                /// DE-SERIALISATION ///
+                ///////////////////////
+                ReturnClass RT = new ReturnClass();
+                XmlSerializer xmls = new XmlSerializer(RT.GetType());
+                StringReader returnclasstostring = new StringReader(datafromserver);
+                RT = (ReturnClass)xmls.Deserialize(returnclasstostring);
+                if (RT.success == true)
                 {
-                    if (!window.IsActive)
+                    Done.IsEnabled = false;
+                    Done.Content = "finish";
+                    this.Close();
+                    foreach (Window window in App.Current.Windows)
                     {
-                        window.Show();
+                        if (!window.IsActive)
+                        {
+                            window.Show();
+                        }
                     }
                 }
-            }         
+                else
+                {
+                    MessageBox.Show("Error creating an account, please try again!");
+                }
+                STCclient.Close();
+                STClistener.Stop();
+                //NEEDS TO ONLY CLOSE WHEN RECIEVING SUCCESS SIGNAL
+                /* You could loop all of your window, and then check if it is hidden,
+                 and then you could show it again, refer to below code snippet:    */
+
+            }    
+            
         }
         private void CUserName_GotFocus(object sender, RoutedEventArgs e)
         {
