@@ -412,6 +412,7 @@ namespace Server
                             try
                                 {
 
+
                                     newEmail.Send(); 
 
                                     //store in senders sent
