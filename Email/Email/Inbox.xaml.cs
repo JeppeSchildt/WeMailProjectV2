@@ -47,7 +47,7 @@ namespace CLIENT
           
 
           var FileName = FillIn;
-
+            
             for (int i = 1; i <= numberOfLabels; i++) {
                 FileName[i-1] = System.IO.Path.GetFileNameWithoutExtension(FillIn[i-1]);
                 var labelName = string.Format("Label{0}", i);
@@ -79,8 +79,13 @@ namespace CLIENT
         {
             var fil = FindSent();
 
-            if (fil.Count != 0)
-            File.Delete(fil[0]);
+            if (fil.Count != 0) 
+            {
+                File.Delete(fil[0]);
+                MessageBox.Show("Sent Email has been delete");
+
+
+            }
             else {
                 MessageBox.Show("Folder is empty");
 
