@@ -62,17 +62,8 @@ namespace CLIENT
 
             message.Subject = subject;
             message.Body = text;
-
             SendMail.Wemailtransfer(Sender, Recipient, message);
-            /*
-            if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
-                SendMail.Wemailtransfer(Sender, Recipient, message);
-            }
-            else {
-                SendMail.Regular(Sender, Recipient, message);
-            }*/
-
-            MessageBox.Show("Email has been sent!!");
+            
 
             Inbox inbox = new Inbox();            // show the next window
             inbox.Show();
@@ -105,13 +96,14 @@ namespace CLIENT
     }
     public class SendMail
     {
-        static string server = "mail.smtp2go.com"; //Current SMTP server. Coupled to IP
+        static string server = "mail.smtp2go.com"; //Current SMTP server. Coupled to IP   
+        /*
         public static void Regular(MailAddress Sender, MailAddress Recipient, MailMessage message)
         {
             SmtpClient client = new SmtpClient(server);
             client.Send(message);
            // MessageBox.Show("Email Sent!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        } */
 
         public static bool Wemailtransfer(MailAddress Sender, MailAddress Recipient, MailMessage message)
         {
@@ -138,9 +130,46 @@ namespace CLIENT
                 byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
                 int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
                 //string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
-                
+
                 //gets return signal but needs return class aswell.. check serialization
-                MessageBox.Show("Succes GGGL: " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
+
+
+                ////////////////////////////
+                /// STC - SERIALISATION ///
+                //////////////////////////
+                const int PORT_N1 = 5001;
+                IPAddress localaddress = IPAddress.Parse(LOCALHOST);
+                TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
+
+                Console.WriteLine("Listening to server on sendemail.Xaml.Cs:");
+                STClistener.Start();
+                TcpClient STCclient = STClistener.AcceptTcpClient();
+
+                NetworkStream nwStreamFromServer = STCclient.GetStream();
+                byte[] serverbuffer = new byte[STCclient.ReceiveBufferSize];
+                //read
+                int bytesfromserver = nwStreamFromServer.Read(serverbuffer, 0, STCclient.ReceiveBufferSize);
+                //convert into string
+                string datafromserver = Encoding.ASCII.GetString(serverbuffer, 0, bytesfromserver);
+                Console.WriteLine("Info from server: " + datafromserver);
+                ReturnClass RT = new ReturnClass();
+                XmlSerializer xmls = new XmlSerializer(RT.GetType());
+                StringReader returnclasstostring = new StringReader(datafromserver);
+                RT = (ReturnClass)xmls.Deserialize(returnclasstostring);
+                if(RT.success)
+                {
+                    MessageBox.Show("Email has been sent!!");
+                }
+                else
+                {
+                    MessageBox.Show("ERROR IN SENDING: "+ RT.exceptionstring);
+                    
+                }
+
+
+                //MessageBox.Show("Succes GGGL: " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
+                STCclient.Close();
+                STClistener.Stop();
                 tcpclient.Close();
                 return /*bool.Parse*/(true/*returnsignal*/);
             }

@@ -185,7 +185,7 @@ namespace Server
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);
                 //start STC client //
-                TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
+                TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1); //error here
                 NetworkStream nwStreamSTC = STCclient.GetStream();
                 /*
                 Console.WriteLine("\n Sender: " + receivedEmail.senderAddress);
@@ -214,7 +214,6 @@ namespace Server
                                 if (!(Directory.Exists(dir)))
                                 {
                                     Directory.CreateDirectory(dir);
-
                                     string inboxPath = dir + "/inbox";
                                     string sentPath = dir + "/sent";
                                     string draftsPath = dir + "/drafts";
@@ -326,34 +325,75 @@ namespace Server
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
-                        Console.WriteLine(domain);                        
+
+                        Console.WriteLine(domain);
+
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
-                             // receivedEmail.Send();
-                            //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
-                            var reciver = newEmail.receiverAddress;
-                            String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
-                            
+                            try
+                                {
+                                    // receivedEmail.Send();
+                                    //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
+                                    var reciver = newEmail.receiverAddress;
+                                    String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
+                                    //   var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
+                                    //  if (Directory.Exists(reciverID)) {
 
-                           //   var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
-                          //  if (Directory.Exists(reciverID)) {
+                                    Write.Files2(newEmail);
+                                    //  Write.read(newEmail);
+                                    //   }
 
-                                Write.Files2(newEmail);
-                              //  Write.read(newEmail);
-                         //   }
+                                    //  else {
+                                    Write.Files(newEmail);
+                                    Write.read(newEmail);
+                                    //  }
 
-                          //  else {
+                                    ReturnClass rtrn = new ReturnClass();
+                                    rtrn.success = true;
+                                    string returnclassstring = serializer(rtrn);
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                }
 
-                                Write.Files(newEmail);
-                                Write.read(newEmail);
-                          //  }
+                          catch(Exception ex)
+                                {
+                                    ReturnClass rtrn = new ReturnClass();
+                                    rtrn.success = false;
+                                    rtrn.exceptionstring = ex.ToString();
+                                    string returnclassstring = serializer(rtrn);
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                }
                         }
                         else
                         {
-                            //receivedEmail.Send();
-                            //store in senders sent
-                            Write.Files(newEmail);
-                            Write.read(newEmail);
+                            try
+                                {
+                                    newEmail.Send(); //Works?
+                                    //receivedEmail.Send();
+                                    //store in senders sent
+                                    Write.Files(newEmail);
+                                    Write.read(newEmail);
+                                    ReturnClass rtrn = new ReturnClass();
+                                    rtrn.success = true;
+                                    string returnclassstring = serializer(rtrn);
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ReturnClass rtrn = new ReturnClass();
+                                    rtrn.success = false;
+                                    rtrn.exceptionstring = ex.ToString();
+                                    string returnclassstring = serializer(rtrn);
+                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                    //SEND
+                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                }
+
                         }
 
                         //newEmail.sendEmail(USER);
