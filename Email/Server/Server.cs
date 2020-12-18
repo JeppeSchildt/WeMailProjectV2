@@ -51,8 +51,15 @@ public class EmailFolder
 }
 public class ReturnClass
 {
+    //Could do enum success/fail instead of bool. Not sure if needed though
+    public Boolean success;
+    // public Exception ex;
+    public string exceptionstring; //Cannot XML serialize exception as it uses IDIRECTORY. DO ex.tostring instead.. 
     public ReturnClass() {}
-    public ReturnClass(Exception ex, bool success) {}
+    public ReturnClass(string excep, bool succ) {
+        success = succ;
+        exceptionstring = excep;
+    }
 }
 public class Email
 {
@@ -208,7 +215,6 @@ namespace Server
                             string inboxPath = dir + "/inbox";
                             string sentPath = dir + "/sent";
                             string draftsPath = dir + "/drafts";
-
                             Directory.CreateDirectory(inboxPath);
                             Directory.CreateDirectory(sentPath);
                             Directory.CreateDirectory(draftsPath);
@@ -220,15 +226,10 @@ namespace Server
                 }
                     case "LOGIN":
                         {
-
-
-
-
                             LoginAttempt Attempt = new LoginAttempt();
                             Attempt = deserializer(Attempt,dataReceived);
                             Console.WriteLine("\n Accountname Attempt: " + Attempt.UserName);
-                            Console.WriteLine("\n Password attempt: " + Attempt.Password);
-                              
+                            Console.WriteLine("\n Password attempt: " + Attempt.Password);      
                             string InfoList = dbdir + @"\UserName.txt";
                             if (!File.Exists(InfoList)){ //If UserName.txt does not exist, make it. 
                                 using (StreamWriter sw = File.CreateText(InfoList))
@@ -249,43 +250,46 @@ namespace Server
                                     // if string  is found, return +1   if not return -1, if empty return 0
                                     {
                                         Console.WriteLine("Successfull login!");
-                                        /*
-                                        userID = UserID.Text;
-                                        Inbox inbox = new Inbox();            // show the next window
-                                        inbox.Show();
-                                        this.Hide();
-                                        */
-                                        //return;
                                         //////////////////
                                         ///TCP - START/// 
                                         ////////////////
                                         ///
                                         Console.Write("SENDING TO CLIENT USING TCP");
-                                        string texttosend = "success"; //Needs to be the serialized return class
+                                        ReturnClass rtn = new ReturnClass();
+                                        rtn.success = true;
+                                        rtn.exceptionstring = "This will be the exception";
+                                        string returnclassstring = serializer(rtn);
+                                        //string texttosend = "success"; //Needs to be the serialized return class
                                         TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
                                         NetworkStream nwStreamSTC = STCclient.GetStream();
-                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(texttosend);
+                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                                         //SEND
                                         nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                                         STCclient.Close();
                                         ////////////////
                                         ///TCP - END /// 
                                         ///////////////
-
-
-
-
                                     }
-                                    else { Console.WriteLine("Error logging in!"); }
+                                    else { //return class of faults
+                                        ReturnClass rtn = new ReturnClass();
+                                        rtn.success = false;
+                                        rtn.exceptionstring = "Some error..";
+                                        string returnclassstring = serializer(rtn); 
+                                        TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
+                                        NetworkStream nwStreamSTC = STCclient.GetStream();
+                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                        //SEND
+                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                        STCclient.Close();
+                                        Console.WriteLine("Error logging in!");
+                                        
+                                      }
                                 }
-                                
-                                //MessageBox.Show("Wrong user name or password, create a new user name");
                             }
                             break;
                         }
                     case "MARK":
-                        {
-                            
+                        { 
                             //email deserialization
                             break;
                         }
@@ -297,10 +301,7 @@ namespace Server
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
-
                              // receivedEmail.Send();
-
-                               
                             //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                             var reciver = newEmail.receiverAddress;
                             String reciverID = reciver.Substring(0, reciver.IndexOf("@"));

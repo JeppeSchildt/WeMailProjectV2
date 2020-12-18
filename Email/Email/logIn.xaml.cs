@@ -107,9 +107,6 @@ namespace CLIENT
             //---read back the text---
             byte[] bytesToRead = new byte[tcpclient.ReceiveBufferSize];
             int bytesRead = nwStream.Read(bytesToRead, 0, tcpclient.ReceiveBufferSize);
-            //string returnsignal = Encoding.UTF8.GetString(bytesToRead, 0, bytesRead);
-
-            //gets return signal but needs return class aswell.. check serialization
             Console.WriteLine("Yall?\n"+Encoding.ASCII.GetString(bytesToRead, 0, bytesRead)); /* returnsignal*//*); //Recieves true if success, false if error. Should be changed to a exception if error later. 
             */
             tcpclient.Close();
@@ -125,11 +122,23 @@ namespace CLIENT
             //convert into string
             string datafromserver = Encoding.ASCII.GetString(serverbuffer, 0, bytesfromserver);
             Console.WriteLine("Info from server: "+datafromserver);
-            if (datafromserver.Equals("success"))
+            /////////////////////////
+            /// DE-SERIALISATION ///
+            ///////////////////////
+            ReturnClass RT = new ReturnClass();
+            XmlSerializer xmls = new XmlSerializer(RT.GetType());
+            StringReader returnclasstostring = new StringReader(datafromserver);
+            RT = (ReturnClass)xmls.Deserialize(returnclasstostring);
+
+            if (RT.success == true)
             {
                 Inbox inbox = new Inbox();            // show the next window
                 inbox.Show();
                 this.Hide();
+            }
+            else {
+                MessageBox.Show("Error in login");
+                Password.Password = "";
             }
             STCclient.Close();
             STClistener.Stop();
@@ -137,47 +146,6 @@ namespace CLIENT
             ////////////////////////////
             /// END-OF-SERIALISATION ///
             /////////////////////////// 
-
-
-            /*
-            
-            string InfoList = dbdir+@"\UserName.txt"; // \WeMailProjectV2\Email
-            //MessageBox.Show("info: \n" + InfoList);
-            if (!File.Exists(InfoList)) { //If UserName.txt does not exist, make it. 
-                using (StreamWriter sw = File.CreateText(InfoList)) {
-                    sw.Flush();
-                    sw.Close();
-                }
-            }
-
-
-            using (var sr = new StreamReader(InfoList))  //Open UserName.txt
-            {
-                string Decrypt = DecryptPass(Password.Password); //Encrypts the password to check against the one in storage
-                while (!sr.EndOfStream) {
-                    var line = sr.ReadLine();
-                    string[] words = line.Split(',');
-                    if (String.IsNullOrEmpty(line)) continue;
-                    if (words[0].IndexOf(UserID.Text, StringComparison.CurrentCultureIgnoreCase) >= 0 && words[1].IndexOf(Decrypt, StringComparison.CurrentCultureIgnoreCase) >= 0)
-                    // if string  is found, return +1   if not return -1, if empty return 0
-                    {
-                        userID = UserID.Text; 
-                        Inbox inbox = new Inbox();            // show the next window
-                        inbox.Show();
-                        this.Hide();
-                        return;
-                    }
-                }
-                //IF SUCCESS DO:
-                //userID = UserID.Text; //not sure if still uses
-                /*
-                Inbox inbox = new Inbox();            // show the next window
-                inbox.Show();
-                this.Hide();
-                return; */ /*
-                //IF FAIL DO: 
-                //MessageBox.Show("Wrong user name or password, create a new user name"); 
-            } */
         }
 
         public void Forgot_Click(object sender, RoutedEventArgs e)
@@ -190,6 +158,19 @@ namespace CLIENT
             Create create = new Create();               // got to the crate site
             create.Show();
             this.Hide();
+        }
+    }
+    public class ReturnClass
+    {
+        //Could do enum success/fail instead of bool. Not sure if needed though
+        public Boolean success;
+        // public Exception ex;
+        public string exceptionstring; //Cannot XML serialize exception as it uses IDIRECTORY. DO ex.tostring instead.. 
+        public ReturnClass() { }
+        public ReturnClass(string excep, bool succ)
+        {
+            success = succ;
+            exceptionstring = excep;
         }
     }
     public class LoginAttempt 
