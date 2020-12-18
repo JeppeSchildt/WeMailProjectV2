@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Security.Cryptography;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Net.Mail;
 using System.Xml.Serialization;
@@ -90,6 +91,7 @@ namespace CLIENT
             /////////////////////
             Console.WriteLine("Beginning Serialisation...\n");
             const int PORT_NO = 5000;
+            const int PORT_N1 = 5001;
             const string LOCALHOST = "127.0.0.1";
             TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
             NetworkStream nwStream = tcpclient.GetStream();
@@ -109,7 +111,28 @@ namespace CLIENT
 
             //gets return signal but needs return class aswell.. check serialization
             Console.WriteLine("Yall?\n"+Encoding.ASCII.GetString(bytesToRead, 0, bytesRead)); /* returnsignal*//*); //Recieves true if success, false if error. Should be changed to a exception if error later. 
-            tcpclient.Close(); 
+            */
+            tcpclient.Close();
+            IPAddress localaddress = IPAddress.Parse(LOCALHOST);
+            TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
+            Console.WriteLine("Listening to server ay:");
+            STClistener.Start();
+            TcpClient STCclient = STClistener.AcceptTcpClient();
+            NetworkStream nwStreamFromServer = STCclient.GetStream();
+            byte[] serverbuffer = new byte[STCclient.ReceiveBufferSize];
+            //read
+            int bytesfromserver = nwStreamFromServer.Read(serverbuffer, 0, STCclient.ReceiveBufferSize);
+            //convert into string
+            string datafromserver = Encoding.ASCII.GetString(serverbuffer, 0, bytesfromserver);
+            Console.WriteLine("Info from server: "+datafromserver);
+            if (datafromserver.Equals("success"))
+            {
+                Inbox inbox = new Inbox();            // show the next window
+                inbox.Show();
+                this.Hide();
+            }
+            STCclient.Close();
+            STClistener.Stop();
 
             ////////////////////////////
             /// END-OF-SERIALISATION ///

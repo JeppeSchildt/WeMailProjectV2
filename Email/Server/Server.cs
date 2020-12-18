@@ -128,6 +128,7 @@ namespace Server
 
     class Server
     {
+        const int PORT_N1 = 5001;
         const int PORT_NO = 5000;
         const string SERVER_IP = "127.0.0.1"; //Run over localhost
         /* Core driver of server */
@@ -219,6 +220,10 @@ namespace Server
                 }
                     case "LOGIN":
                         {
+
+
+
+
                             LoginAttempt Attempt = new LoginAttempt();
                             Attempt = deserializer(Attempt,dataReceived);
                             Console.WriteLine("\n Accountname Attempt: " + Attempt.UserName);
@@ -251,6 +256,25 @@ namespace Server
                                         this.Hide();
                                         */
                                         //return;
+                                        //////////////////
+                                        ///TCP - START/// 
+                                        ////////////////
+                                        ///
+                                        Console.Write("SENDING TO CLIENT USING TCP");
+                                        string texttosend = "success"; //Needs to be the serialized return class
+                                        TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
+                                        NetworkStream nwStreamSTC = STCclient.GetStream();
+                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(texttosend);
+                                        //SEND
+                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                        STCclient.Close();
+                                        ////////////////
+                                        ///TCP - END /// 
+                                        ///////////////
+
+
+
+
                                     }
                                     else { Console.WriteLine("Error logging in!"); }
                                 }
@@ -267,7 +291,7 @@ namespace Server
                         }
                     case "SEND": //DONE?
                         { //email deserialization - note sure if it sends lmao
-                            Email newEmail = new Email();
+                        Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
