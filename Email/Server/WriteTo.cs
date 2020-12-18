@@ -44,6 +44,8 @@ namespace Server
 
         public static void Files2(Email inputEmail)
         {
+
+            Loca();
             var reciver = inputEmail.receiverAddress;
             String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
 

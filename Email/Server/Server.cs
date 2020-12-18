@@ -167,9 +167,8 @@ namespace Server
                 Console.WriteLine("\n Time: " + receivedEmail.timeStamp);
                 Console.WriteLine("\n Subject: " + receivedEmail.subjectMatter);
                 Console.WriteLine("\n Content: " + receivedEmail.contentText);
-
-
-                //requestHandler(USER, REQ, dataReceived);
+                
+                //requestHandler(USER, REQ, dataReceived);  
 
                 //---request handling---
                 switch (REQ) {
@@ -186,19 +185,25 @@ namespace Server
                         Console.WriteLine(domain);                        // Den her virke kun for wemail, men mail kan sendes
                         if (domain == "wemail.com")
                         {
+                            receivedEmail.Send();
+                               
                             //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                             var reciver = newEmail.receiverAddress;
                             String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
+                            
 
-                            var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID); 
-                            if (Directory.Exists(reciverID))
-                            {
+                           //   var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
+                          //  if (Directory.Exists(reciverID)) {
+
                                 Write.Files2(newEmail);
-                                Write.read(newEmail);
-                            }
+                              //  Write.read(newEmail);
+                         //   }
 
-                            Write.Files(newEmail);
-                            Write.read(newEmail);
+                          //  else {
+
+                                Write.Files(newEmail);
+                                Write.read(newEmail);
+                          //  }
                         }
                         else
                         {
@@ -226,7 +231,7 @@ namespace Server
                 }
                 //---call requestHandler---
                 //requestHandler(USER, REQ, dataReceived);
-
+            
                 //---something important---
                 //Writing back to client
                 byte[] testing = Encoding.ASCII.GetBytes("Are you receiving this message?");
