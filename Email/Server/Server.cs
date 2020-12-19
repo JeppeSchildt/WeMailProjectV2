@@ -205,6 +205,8 @@ namespace Server
                 //start STC client //
                 TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1); //error here
                 NetworkStream nwStreamSTC = STCclient.GetStream();
+
+                UserAccount CurrentUser = new UserAccount();
                 //---request handling---
                 switch (REQ) {
                     case "CREATEUSER": //DONE?
@@ -291,6 +293,7 @@ namespace Server
                                     // if string  is found, return +1   if not return -1, if empty return 0
                                     {
                                         Console.WriteLine("Successfull login!");
+                                        CurrentUser.UserName = Attempt.UserName; //Needs to actually return user class...
                                         found = true;
                                     }
                                     else { //return class of faults
@@ -304,10 +307,10 @@ namespace Server
                                     ////////////////
                                     ///
                                     Console.Write("SENDING TO CLIENT USING TCP");
-                                    UserAccount usrtest = new UserAccount();
-                                    usrtest.UserName = "HenrikTisser";
+                                    
+                                    
                                     ReturnClass returntest = new ReturnClass();
-                                    returntest.useracc = usrtest;
+                                    returntest.useracc = CurrentUser;
                                     returntest.success = true;
                                     returntest.exceptionstring = "";
                                     string returnclassstring = serializer(returntest);
@@ -343,7 +346,7 @@ namespace Server
                             }
                             break;
                         }
-                    case "MARK": //UNREAD - READ - IMPORTANT :: Send 
+                    case "MARK": //UNREAD - READ - IMPORTANT :: Should be done, returning an updated useraccount
                         {
 
                             //recieves: User class - Email Class - Mark
@@ -376,8 +379,6 @@ namespace Server
                                 returnClass.exceptionstring = ex.ToString();
                                 returnClass.success = false;
                             }
-                            //get useraccount with updated list back from write
-                            //return userclass
                             returnClass.useracc = UserA;
                             string returnclassstring = serializer(returnClass);
                             byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
@@ -387,95 +388,62 @@ namespace Server
                             STCclient.Close();
                             break;
                         }
-                    case "SEND":  //DONE ?
+                    case "SEND":  //DONE ? Needs to return a useraccount with updated sent folder
                         { 
                         Email newEmail = new Email();
                         newEmail = deserializer(newEmail, dataReceived);    
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
-
                         Console.WriteLine(domain);
-
+                        ReturnClass rtrn = new ReturnClass();
                         if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
-                            try
-                                {
-                                    // receivedEmail.Send();
-                                    //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
+                            try 
+                                {  
                                     var reciver = newEmail.receiverAddress;
                                     String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
                                        var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
                                     if (Directory.Exists(receiverPath)) {
-
                                         Write.Files2(newEmail);
-
                                         Write.Files(newEmail);
-                                      //  Write.read(newEmail);
-
-
-                                        ReturnClass rtrn = new ReturnClass();
                                         rtrn.success = true;
-                                        string returnclassstring = serializer(rtrn);
-                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                        //SEND
-                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                                     }
                                     else {
-                                        ReturnClass rtrn = new ReturnClass();
                                         rtrn.success = false;
                                         rtrn.exceptionstring = "no receipient found";
-
-                                        string returnclassstring = serializer(rtrn);
-                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                        //SEND
-                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-
                                     }
                                 }
-
                           catch(Exception ex)
                                 {
-                                    ReturnClass rtrn = new ReturnClass();
                                     rtrn.success = false;
                                     rtrn.exceptionstring = ex.ToString();
-                                    string returnclassstring = serializer(rtrn);
-                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                    //SEND
-                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                                 }
                         }
                         else
                         {
                             try
                             {
-
-
                                     newEmail.Send(); 
-
-                                    //store in senders sent
                                     Write.Files(newEmail);
-                                  //  Write.read(newEmail);
-                                    ReturnClass rtrn = new ReturnClass();
                                     rtrn.success = true;
-                                    string returnclassstring = serializer(rtrn);
-                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                    //SEND
-                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                             }
                                 catch (Exception ex)
                             {
-                                    ReturnClass rtrn = new ReturnClass();
                                     rtrn.success = false;
                                     rtrn.exceptionstring = ex.ToString();
-                                    string returnclassstring = serializer(rtrn);
-                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                    //SEND
-                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                             }
-
                         }
-                            
-
-                            //newEmail.sendEmail(USER);
+                            if (rtrn.success == true)
+                            {
+                                //Needs to update inboxes of user account. Draft is not nessecary as it doesnt use this function
+                                CurrentUser = rtrn.useracc;
+                                CurrentUser = Write.UpdateList(CurrentUser,"sentFolder"); //responds to draftFolder, inboxFolder, sentFolder. Pretty self explanatory
+                                CurrentUser = Write.UpdateList(CurrentUser, "inboxFolder");
+                            }
+                            rtrn.useracc = CurrentUser;
+                            string returnclassstring = serializer(rtrn);
+                            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                            //SEND
+                            nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                             break;
                         }
                     case "FORWARD":
@@ -487,9 +455,28 @@ namespace Server
                             break;
                         }
                     case "UPDATEINBOX":
-                        { 
+                        { //Should find folder to update in serialized message and only update one, however only a question of time complexity
+                            ReturnClass rtrn = new ReturnClass();
+                            try
+                            {
+                                Console.WriteLine("Updating in box server side");
+                                Write.UpdateList(CurrentUser, "sentFolder");
+                                Write.UpdateList(CurrentUser, "draftFolder");
+                                CurrentUser = Write.UpdateList(CurrentUser, "inboxFolder");
+                                rtrn.success = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                rtrn.success = false;
+                                rtrn.exceptionstring = ex.ToString();
+                            }
+                            rtrn.useracc = CurrentUser;
+                            string returnclassstring = serializer(rtrn);
+                            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                            //SEND
+                            nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                             //inbox deserialization
-                        break;
+                            break;
                         }
                     case "DELETE":
                         { //email deserialization

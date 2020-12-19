@@ -134,6 +134,7 @@ namespace Server
             UA = UpdateList(UA,ReadFile.emailType);
             return UA; //Need a way to update this cunt
         }
+
         public static UserAccount UpdateList(UserAccount UA,string foldertype) //Updates list of emails connected to account
         {
             string path = dbdir + "/Users/" + UA.UserName + @"/"+foldertype; //Path to the folders
