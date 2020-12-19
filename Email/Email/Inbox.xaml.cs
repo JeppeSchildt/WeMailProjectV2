@@ -16,12 +16,19 @@ using System.Net;
 using System.Net.Sockets;
 using System.Net.Mail;
 using System.Xml.Serialization;
-
 namespace CLIENT
 {
+ //CAN ACCESS CurrUser using _login.CurrUser;   
     public partial class Inbox : Window
     {
-        public Inbox()
+        private readonly LogIn _login;
+        
+        public Inbox(LogIn logIn) //
+        {
+            InitializeComponent();
+            _login = logIn;
+        }
+        public Inbox() //
         {
             InitializeComponent();
         }
@@ -99,31 +106,57 @@ namespace CLIENT
         private void Mark_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("not implemented yet you impatient bastard");
-           
-            /*
             //dummy function for mark
             //send over 5000
             const int PORT_NO = 5000;
             const int PORT_N1 = 5001;
             const string LOCALHOST = "127.0.0.1";
-            Console.WriteLine("Beginning Serialisation...\n");
+            Console.WriteLine("Beginning Serialisation at Inbox.xaml.xs..\n");
             TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO); //SEND ON PORT 5k
             NetworkStream nwStream = tcpclient.GetStream();
             IPAddress localaddress = IPAddress.Parse(LOCALHOST);
             TcpListener STClistener = new TcpListener(localaddress, PORT_N1);
-            */
-            /*
-            //Need someway to do userid.useraccount HIGH PRIO
-            UserAccount ua = new UserAccount();
-            XmlSerializer xmlSerializer = new XmlSerializer(loginattempt.GetType());
+            XmlSerializer xmlSerializer = new XmlSerializer(_login.CurrUser.GetType());
             StringWriter stringified = new StringWriter();
-            xmlSerializer.Serialize(stringified, loginattempt);
-            string res = LogIn.userID + DL + "LOGIN" + DL + stringified.ToString(); //CHANGE BACK TO MARK
+            xmlSerializer.Serialize(stringified, _login.CurrUser); //Stringified is now the CurrentUser class
+            char DL = '';
+            Email EmailToMark = new Email("inbox","888@wemail.com","888@wemail.com",DateTime.Now.ToString(),"Kolo","ra","Unread");  
+            XmlSerializer v2 = new XmlSerializer(EmailToMark.GetType());
+            StringWriter EmailStringified = new StringWriter();
+            v2.Serialize(EmailStringified, EmailToMark);
+            string MarkType = "READ";
+            string res = LogIn.userID + DL + "MARK" + DL + stringified.ToString()+DL+EmailStringified+DL+MarkType;
             byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
-            Console.WriteLine("Sending : " + res);
+            Console.WriteLine("Sending ur mom : " + res);
             nwStream.Write(bytesToSend, 0, bytesToSend.Length);
-            //listen on 5001
-            */
+
+            //Listen on 5001
+            STClistener.Start();
+            TcpClient STCclient = STClistener.AcceptTcpClient();
+            NetworkStream nwStreamFromServer = STCclient.GetStream();
+            byte[] serverbuffer = new byte[STCclient.ReceiveBufferSize];
+            //read
+            int bytesfromserver = nwStreamFromServer.Read(serverbuffer, 0, STCclient.ReceiveBufferSize);
+            //convert into string
+            string datafromserver = @Encoding.ASCII.GetString(serverbuffer, 0, bytesfromserver);
+
+            //Need to deserialize
+            ReturnClass RT = new ReturnClass();
+            XmlSerializer xmls = new XmlSerializer(RT.GetType());
+            StringReader returnclasstostring = new StringReader(datafromserver);
+            RT = (ReturnClass)xmls.Deserialize(returnclasstostring);
+            Console.WriteLine("\n UserAccountID: " + RT.useracc.UserName);
+            Console.WriteLine("\n " + RT.success.ToString());
+            _login.CurrUser = RT.useracc;
+            Console.WriteLine("this do be good sign");
+
+
+
+            
+        
+
+            Console.WriteLine("[inbox.xaml.cs] Info from server: " + datafromserver);
+
 
         }
     }

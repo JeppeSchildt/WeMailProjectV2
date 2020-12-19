@@ -159,22 +159,25 @@ namespace CLIENT
                 if(RT.success)
                 {
                     MessageBox.Show("Email has been sent!!");
+                    
                 }
                 else
                 {
                     MessageBox.Show("ERROR IN SENDING: "+ RT.exceptionstring);
-                    
+                    STCclient.Close();
+                    STClistener.Stop();
+                    tcpclient.Close();
+                    return false;
+
                 }
-
-
-                //MessageBox.Show("Succes GGGL: " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead) /* returnsignal*/); //Recieves true if success, false if error. Should be changed to a exception if error later. 
                 STCclient.Close();
                 STClistener.Stop();
                 tcpclient.Close();
-                return /*bool.Parse*/(true/*returnsignal*/);
+                return (true);
             }
             catch (Exception ex) {
                 ExceptionHandler.SendMailException(ex);
+                //Should check if TCP shit is open n close if they are
                 return false;
             }
         }

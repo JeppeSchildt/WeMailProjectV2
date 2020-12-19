@@ -67,13 +67,11 @@ namespace CLIENT
             if (UserID.Text == "User ID")
                 UserID.Text = "";
         }
-
         public void Password_GotFocus(object sender, RoutedEventArgs e)
         {
             if (Password.Password == "Password")
                 Password.Password = "";
         }
-
         static string EncryptPass(string value)     // Decrypt function
         {
             byte[] data = UTF8Encoding.UTF8.GetBytes(value);
@@ -148,7 +146,7 @@ namespace CLIENT
          ///////////////
             if (RT.success == true)
             {
-                Inbox inbox = new Inbox();            // show the next window
+                Inbox inbox = new Inbox(this);            // show the next window
                 inbox.Show();
                 this.Hide();
             }

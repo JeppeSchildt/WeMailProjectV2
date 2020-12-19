@@ -47,6 +47,7 @@ namespace CLIENT
             sw.Flush();
             sw.Close(); 
         }
+        
 
         public static void read()
         {

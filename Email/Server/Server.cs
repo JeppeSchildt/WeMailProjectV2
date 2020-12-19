@@ -23,26 +23,17 @@ public class LoginAttempt
         Password = Pass;
     }
 }
-/*
-public class MarkRequest
-{
-    public string type;
-    public MarkRequest(){}
-    public MarkRequest(string t) {
-        type = t;
-            }
-} */
 public class UserAccount
 {
     public string UserName, PassWord, PhoneNumber;
-    public List<EmailFolder> userEmailFolders;
+    //public List<EmailFolder> userEmailFolders;
+    public List<Email> sentFolder,draftFolder,inboxFolder;
     public UserAccount() { }
     public UserAccount(string UN, string Pass, string TLF)
     {
         UserName = UN;
         PassWord = Pass;
         PhoneNumber = TLF;
-
     }
     public class ReturnClass
     {
@@ -352,23 +343,48 @@ namespace Server
                             }
                             break;
                         }
-                    case "MARK": //UNREAD - READ - IMPORTANT
+                    case "MARK": //UNREAD - READ - IMPORTANT :: Send 
                         {
-                            UserAccount usrtest = new UserAccount();
-                            usrtest.UserName = "HenrikTisser";
-                            ReturnClass returntest = new ReturnClass();
-                            returntest.useracc = usrtest;
-                            returntest.success = true;
-                            returntest.exceptionstring = "";
-                            string returnclassstring = serializer(returntest);
+
+                            //recieves: User class - Email Class - Mark
+                            char DL = '';
+                            Console.WriteLine("Mark:"+dataReceived );
+                            string Userclassstring = dataReceived.Substring(0,dataReceived.IndexOf(DL));
+                            string tempdata = dataReceived.Substring(dataReceived.IndexOf(DL)+1); //From right after dl to end
+                            string EmailClassString = tempdata.Substring(0, tempdata.IndexOf(DL));
+                            string MarkType = tempdata.Substring(tempdata.IndexOf(DL)+1);
+                            //Deserialize UserClass:
+                            UserAccount UserA = new UserAccount();
+                            UserA = deserializer(UserA, Userclassstring);
+                            //Deserialize EmailClass
+                            Email EmailToMark = new Email();
+                            EmailToMark = deserializer(EmailToMark,EmailClassString);
+                            string folder = EmailToMark.emailType;
+                            Console.WriteLine("\nUserClass:" + Userclassstring);
+                            Console.WriteLine("\nEmailClass:" + EmailClassString);
+                            Console.WriteLine("\nMarkType:"+MarkType);
+                            Console.WriteLine("Editing file..");
+
+                            ReturnClass returnClass = new ReturnClass();
+                            try
+                            {
+                                UserA=Write.edit(UserA,EmailToMark, 5, MarkType); //Updates Flag on the email.
+                                Console.Write("User was updated?");
+                                returnClass.success = true;
+                            }
+                            catch(Exception ex) {
+                                returnClass.exceptionstring = ex.ToString();
+                                returnClass.success = false;
+                            }
+                            //get useraccount with updated list back from write
+                            //return userclass
+                            returnClass.useracc = UserA;
+                            string returnclassstring = serializer(returnClass);
                             byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                             //SEND
                             nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                            Console.WriteLine("Information was sent from MARK");
+                            Console.WriteLine("Information was sent from Server regarding Mark");
                             STCclient.Close();
-                            // email deserialization
-                            // client sends user - request - flag to update
-                            // server updates, sends back 
                             break;
                         }
                     case "SEND":  //DONE ?

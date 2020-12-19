@@ -21,17 +21,19 @@ using System.Xml.Serialization;
 
 namespace CLIENT
 {   public partial class Create : Window
-    {
+    { 
+        
         public Create()
         {
             InitializeComponent();
-            Tlf.MaxLength = 8;
+            Tlf.MaxLength = 8; 
         }
         public int GetIntAValue()
         {
             Random rnd = new Random();
             return rnd.Next(1000, 9999);
         }
+        
         public void CAPTCHA()
         {
             int code = GetIntAValue();
