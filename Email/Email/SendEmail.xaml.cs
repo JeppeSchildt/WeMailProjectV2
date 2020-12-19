@@ -62,7 +62,6 @@ namespace CLIENT
 
             message.Subject = subject;
             message.Body = text;
-            
             if ( SendMail.Wemailtransfer(Sender, Recipient, message) == true) 
             {
                 Inbox inbox = new Inbox();            // show the next window
