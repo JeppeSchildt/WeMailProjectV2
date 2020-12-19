@@ -58,7 +58,7 @@ namespace CLIENT
             dbdir = currentdir;
             //MessageBox.Show("LOCATION: \n" +dbdir);
             //TESTING FUNCTION:
-            MessageBox.Show("Database directory :" + dbdir);
+           // MessageBox.Show("Database directory :" + dbdir);
         }
 
         public static string userID;
@@ -66,11 +66,13 @@ namespace CLIENT
         {
             if (UserID.Text == "User ID")
                 UserID.Text = "";
+            
         }
         public void Password_GotFocus(object sender, RoutedEventArgs e)
         {
             if (Password.Password == "Password")
                 Password.Password = "";
+            
         }
         static string EncryptPass(string value)     // Decrypt function
         {
@@ -85,7 +87,19 @@ namespace CLIENT
                 }
             } 
         }
-        private void logIn_Click(object sender, RoutedEventArgs e)
+
+      
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (UserID.Text != "" && Password.Password != "") {
+
+                if (e.Key == Key.Enter) {
+                    logIn_Click(sender, e);
+                }
+            }
+        }
+        private void logIn_Click(object sender, RoutedEventArgs args)
         {
             
             char DL = '';
@@ -103,6 +117,7 @@ namespace CLIENT
             LoginAttempt loginattempt = new LoginAttempt(UserName, PassW);
             XmlSerializer xmlSerializer = new XmlSerializer(loginattempt.GetType());
             StringWriter stringified = new StringWriter();
+
             xmlSerializer.Serialize(stringified, loginattempt);
             string res = LogIn.userID + DL + "LOGIN" + DL + stringified.ToString();
             byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);

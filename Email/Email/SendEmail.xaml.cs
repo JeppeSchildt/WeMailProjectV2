@@ -62,12 +62,14 @@ namespace CLIENT
 
             message.Subject = subject;
             message.Body = text;
-            SendMail.Wemailtransfer(Sender, Recipient, message);
             
-
-            Inbox inbox = new Inbox();            // show the next window
-            inbox.Show();
-            this.Hide();
+            if ( SendMail.Wemailtransfer(Sender, Recipient, message) == true) 
+            {
+                Inbox inbox = new Inbox();            // show the next window
+                inbox.Show();
+                this.Close();
+            }
+           
         }
 
         public void draft_Click(object sender, RoutedEventArgs e) //USER CLICKS SEND BUTTON
@@ -159,21 +161,22 @@ namespace CLIENT
                 if(RT.success)
                 {
                     MessageBox.Show("Email has been sent!!");
-                    
+
+                    STCclient.Close();
+                    STClistener.Stop();
+                    tcpclient.Close();
+                    return true;
                 }
                 else
                 {
-                    MessageBox.Show("ERROR IN SENDING: "+ RT.exceptionstring);
+                  //  MessageBox.Show("no receipient found");
+                      MessageBox.Show("ERROR IN SENDING: "+ RT.exceptionstring);
                     STCclient.Close();
                     STClistener.Stop();
                     tcpclient.Close();
                     return false;
 
                 }
-                STCclient.Close();
-                STClistener.Stop();
-                tcpclient.Close();
-                return (true);
             }
             catch (Exception ex) {
                 ExceptionHandler.SendMailException(ex);

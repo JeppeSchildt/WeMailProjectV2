@@ -17,7 +17,7 @@
 
 
         <TextBox x:Name="UserID" x:FieldModifier="public" HorizontalAlignment="Left" Height="31" Margin="194,83,0,0" TextWrapping="Wrap" Text="User ID" VerticalAlignment="Top" Width="146" GotFocus="UserID_GotFocus"/>
-        <PasswordBox x:Name="Password" HorizontalAlignment="Left" Height="31" Margin="194,119,0,0"  Password="Password" VerticalAlignment="Top" Width="146" GotFocus="Password_GotFocus"/>
+        <PasswordBox x:Name="Password" HorizontalAlignment="Left" Height="31" Margin="194,119,0,0"  Password="Password" VerticalAlignment="Top" Width="146" GotFocus="Password_GotFocus" KeyDown="OnKeyDownHandler"/>
 
     </Grid>
 </Window>

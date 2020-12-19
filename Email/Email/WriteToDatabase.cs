@@ -57,6 +57,7 @@ namespace CLIENT
                     var line = sr.ReadLine();
                     string[] words = line.Split(',');
                     if (String.IsNullOrEmpty(line)) continue;
+                    Console.WriteLine(words[5]);
                 }
             }
 

@@ -7,10 +7,14 @@ using System.IO;
 
 namespace Server
 {
-    
+
     public class Write
     {
         public static string dbdir = Loca();
+
+        public static int counter = 1;
+        public static int counter2 = 1;
+
         public static string Loca()
         {
             
@@ -34,12 +38,28 @@ namespace Server
             String senderEmail = inputEmail.senderAddress;
             String userID = senderEmail.Substring(0, senderEmail.IndexOf("@"));    // userID before @
             Console.WriteLine("dbdir is:"+dbdir);
-            
-            StreamWriter sw = new StreamWriter(dbdir +"/Users/" + userID + "/sent/" + inputEmail.subjectMatter + ".txt", true);
-            sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
-                  inputEmail.contentText + "," + inputEmail.emailFlag);
-            sw.Flush();
-            sw.Close();
+            string dir = dbdir + "/Users/" + userID + "/sent/" + inputEmail.subjectMatter + ".txt";
+
+            if (!(File.Exists(dir))) {   // if ! so only "if" works
+               
+
+                StreamWriter sw = new StreamWriter(dir);
+
+                sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
+                    inputEmail.contentText + "," + inputEmail.emailFlag);
+                sw.Flush();
+                sw.Close();
+            }
+           else {          // if no "!" then else "works"
+
+                counter++;
+                StreamWriter SW = new StreamWriter(dbdir + "/Users/" + userID + "/sent/" + inputEmail.subjectMatter + counter + ".txt");
+
+                SW.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
+                      inputEmail.contentText + "," + inputEmail.emailFlag);
+                SW.Flush();
+                SW.Close();
+            }
         }
 
         public static void draft(Email inputEmail)
@@ -58,16 +78,30 @@ namespace Server
 
         public static void Files2(Email inputEmail)
         {
-
             Loca();
             var reciver = inputEmail.receiverAddress;
             String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
 
-            StreamWriter sw = new StreamWriter(dbdir + "/Users/" + reciverID + "/inbox/" + inputEmail.subjectMatter + ".txt", true);
-            sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
-                  inputEmail.contentText + "," + inputEmail.emailFlag);
-            sw.Flush();
-            sw.Close();
+            string dir = dbdir + "/Users/" + reciverID + "/inbox/" + inputEmail.subjectMatter + ".txt";
+
+            if (!(File.Exists(dir))) {   // if ! so only "if" works
+
+                StreamWriter sw = new StreamWriter(dir);
+                sw.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
+                      inputEmail.contentText + "," + inputEmail.emailFlag);
+                sw.Flush();
+                sw.Close();
+            }
+            else {
+
+                counter2++;
+                StreamWriter SW = new StreamWriter(dbdir + "/Users/" + reciverID + "/inbox/" + inputEmail.subjectMatter + counter2 +".txt");
+
+                SW.WriteLine(inputEmail.emailType + "," + inputEmail.senderAddress + "," + inputEmail.receiverAddress + "," + inputEmail.timeStamp + "," +
+                      inputEmail.contentText + "," + inputEmail.emailFlag);
+                SW.Flush();
+                SW.Close();
+            }
         }
 
         public static void read(Email ReadFile)
@@ -82,7 +116,9 @@ namespace Server
                     string[] words = line.Split(',');
                     if (String.IsNullOrEmpty(line)) continue;
                     Console.WriteLine(words[0]);
+
                 }
+
             }
         }
         public static UserAccount edit(UserAccount UA,Email ReadFile, int index, string newcontent) //Takes Email and updates a part of it

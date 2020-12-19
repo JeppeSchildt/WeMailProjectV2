@@ -403,24 +403,33 @@ namespace Server
                                     //.Equals("wemail.com", StringComparison.OrdinalIgnoreCase)) {
                                     var reciver = newEmail.receiverAddress;
                                     String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
-                                    //   var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
-                                    //  if (Directory.Exists(reciverID)) {
+                                       var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
+                                    if (Directory.Exists(receiverPath)) {
 
-                                    Write.Files2(newEmail);
-                                    //  Write.read(newEmail);
-                                    //   }
+                                        Write.Files2(newEmail);
 
-                                    //  else {
-                                    Write.Files(newEmail);
-                                    Write.read(newEmail);
-                                    //  }
+                                        Write.Files(newEmail);
+                                      //  Write.read(newEmail);
 
-                                    ReturnClass rtrn = new ReturnClass();
-                                    rtrn.success = true;
-                                    string returnclassstring = serializer(rtrn);
-                                    byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
-                                    //SEND
-                                    nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+
+                                        ReturnClass rtrn = new ReturnClass();
+                                        rtrn.success = true;
+                                        string returnclassstring = serializer(rtrn);
+                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                        //SEND
+                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                                    }
+                                    else {
+                                        ReturnClass rtrn = new ReturnClass();
+                                        rtrn.success = false;
+                                        rtrn.exceptionstring = "no receipient found";
+
+                                        string returnclassstring = serializer(rtrn);
+                                        byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                                        //SEND
+                                        nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+
+                                    }
                                 }
 
                           catch(Exception ex)
@@ -437,23 +446,23 @@ namespace Server
                         else
                         {
                             try
-                                {
+                            {
 
 
                                     newEmail.Send(); 
 
                                     //store in senders sent
                                     Write.Files(newEmail);
-                                    Write.read(newEmail);
+                                  //  Write.read(newEmail);
                                     ReturnClass rtrn = new ReturnClass();
                                     rtrn.success = true;
                                     string returnclassstring = serializer(rtrn);
                                     byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                                     //SEND
                                     nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                                }
+                            }
                                 catch (Exception ex)
-                                {
+                            {
                                     ReturnClass rtrn = new ReturnClass();
                                     rtrn.success = false;
                                     rtrn.exceptionstring = ex.ToString();
@@ -461,12 +470,13 @@ namespace Server
                                     byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                                     //SEND
                                     nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                                }
+                            }
 
                         }
+                            
 
-                        //newEmail.sendEmail(USER);
-                        break;
+                            //newEmail.sendEmail(USER);
+                            break;
                         }
                     case "FORWARD":
                         { //email deserialization
@@ -497,6 +507,11 @@ namespace Server
                 CTSlistener.Stop(); 
 
            }
+        }
+
+        private static void read()
+        {
+            throw new NotImplementedException();
         }
     }
 }

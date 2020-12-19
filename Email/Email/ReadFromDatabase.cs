@@ -19,7 +19,9 @@ namespace CLIENT
           emailFlag ;
 
         public static void read()
+
         {
+
             using (var sr = new StreamReader(LogIn.dbdir +"/ Users/" + LogIn.userID + "/sent/" + Write.subjectMatter + ".txt"))  // read the directry of the userid and password
             {
 
@@ -47,12 +49,6 @@ namespace CLIENT
           newContentText,
           oldContentText,
           emailFlag);
-
-
         }
-
     }
-
-
-
 }
