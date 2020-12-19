@@ -64,7 +64,6 @@ C:\Users\Jeppe\Documents\GitHub\WeMailProjectV2\Email\Email\obj\Debug\Email.pdb
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\bin\Debug\Email.exe.config
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\bin\Debug\Email.exe
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\bin\Debug\Email.pdb
-C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\obj\Debug\CLIENT.csprojAssemblyReference.cache
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\obj\Debug\logIn.g.cs
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\obj\Debug\Create.g.cs
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Email\obj\Debug\Inbox.g.cs

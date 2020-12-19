@@ -26,6 +26,15 @@ namespace CLIENT
     /// </summary>
     public partial class SendEmail : Window
     {
+        private readonly Inbox _inbox;
+        UserAccount CurrUser = new UserAccount();
+        public SendEmail(Inbox inbox)
+        {
+            InitializeComponent();
+            _inbox = inbox;
+            CurrUser=_inbox.CurrUser;
+            
+        }
         public SendEmail()
         {
             InitializeComponent();
@@ -49,9 +58,9 @@ namespace CLIENT
         public void Send_Click(object sender, RoutedEventArgs e) //USER CLICKS SEND BUTTON
 
         {
+            //MessageBox.Show("yallah:"+CurrUser.UserName);
             string to = Emails.Text; //Takes user input for recipient
-            string from = LogIn.userID+"@wemail.com"; //Current Sender. Needs changing to be personal to each account
-            
+            string from = CurrUser.UserName+"@wemail.com"; //Current Sender. Needs changing to be personal to each account
             MailAddress Sender = new MailAddress(from); //Its possible to do MailAdress(from,"displayname"). Could be usefull ?
             MailAddress Recipient = new MailAddress(to);
             MailMessage message = new MailMessage(Sender, Recipient);
@@ -145,7 +154,6 @@ namespace CLIENT
                 Console.WriteLine("Listening to server on sendemail.Xaml.Cs:");
                 STClistener.Start();
                 TcpClient STCclient = STClistener.AcceptTcpClient();
-
                 NetworkStream nwStreamFromServer = STCclient.GetStream();
                 byte[] serverbuffer = new byte[STCclient.ReceiveBufferSize];
                 //read

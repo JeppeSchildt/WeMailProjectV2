@@ -131,29 +131,34 @@ namespace Server
             sw.Flush();
             sw.Close();
             Console.WriteLine("\nEmail was updated locally.. Trying to update user list");
-            UA = UpdateList(UA,ReadFile.emailType);
+            UA = UpdateList(UA,(Folder)Enum.Parse(typeof(Folder),ReadFile.emailType)); //Changes from string to enum Folder
             return UA; //Need a way to update this cunt
         }
 
-        public static UserAccount UpdateList(UserAccount UA,string foldertype) //Updates list of emails connected to account
+        public static UserAccount UpdateList(UserAccount UA,Folder folder) //Updates list of emails connected to account
         {
+            string foldertype = folder.ToString();
+            Console.WriteLine("\n\n WTFISWRONG:"+UA.UserName+"\n\n");
             string path = dbdir + "/Users/" + UA.UserName + @"/"+foldertype; //Path to the folders
             string[] extension = { ".txt" };
             var files= Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                 .Where(s => extension.Any(ext => ext == System.IO.Path.GetExtension(s)));
             List<string> textfile = new List<string>(); //List of the subject matters 
             textfile = files.ToList();     // textfile er en list med string
-            List<Email> updatedList = new List<Email>();
+            List<Email> updatedList = new List<Email>(); 
             updatedList = readIntoEmailClass(UA,foldertype,textfile);
             switch(foldertype)
             {
-                case ("inboxFolder"):
+                case ("inbox"):
+                    Console.WriteLine("Case: Inbox");
                     UA.inboxFolder = updatedList;
                     break;
-                case ("draftFolder"):
+                case ("drafts"):
+                    Console.WriteLine("Case: Drafts");
                     UA.draftFolder = updatedList;
                     break;
-                case ("sentFolder"):
+                case ("sent"):
+                    Console.WriteLine("\n\nCase: sent\n\n");
                     UA.sentFolder = updatedList;
                     break;
             }
@@ -167,14 +172,18 @@ namespace Server
         public static List<Email> readIntoEmailClass(UserAccount UA, string foldertype, List<string> texts) //Takes list of email names and creates+returns instance list from it.
         {
             Console.Write("We in writeTo.cs:readIntoEmailClass");
+            Console.Write("DBDIR: " + dbdir);
             List<Email> listOfEmails= new List<Email>();
             Email email = new Email();
          for (int i = 0; i<texts.Count;i++) {
-                using (var sr = new StreamReader(dbdir+"/ Users/"+UA.UserName+@"/"+foldertype+@"/"+texts[0]+".txt"))  // read the txt file into email class
+                //using (var stringread = new StreamReader(dbdir+"/Users/"+UA.UserName+@"/"+foldertype+@"/"+texts[0]+".txt"))  // read the txt file into email class
+                using (var stringread = new StreamReader(texts[i]))
+
                 {
-                    while (!sr.EndOfStream)
+                    Console.WriteLine(texts[i]);
+                    while (!stringread.EndOfStream)
                     {
-                        var line = sr.ReadLine();
+                        var line = stringread.ReadLine();
                         string[] words = line.Split(',');
                         if (String.IsNullOrEmpty(line)) continue;
                         email.emailType= words[0];
@@ -184,7 +193,7 @@ namespace Server
                         email.contentText = words[4];
                         email.emailFlag = words[5];
                     }
-                    listOfEmails[i] = email;
+                    listOfEmails.Add(email); //Cannot access using indices, as initial capacity is 0. This makes it grow dynamically. 
                     i++;
                 }
             }

@@ -8,6 +8,11 @@ using System.Xml.Serialization;
 using System.IO;
 using s = System.String;
 
+public enum Folder {
+    inbox,
+    sent,
+    drafts
+}
 public class User
 {
     public string username, password;
@@ -294,6 +299,16 @@ namespace Server
                                     {
                                         Console.WriteLine("Successfull login!");
                                         CurrentUser.UserName = Attempt.UserName; //Needs to actually return user class...
+                                        Console.WriteLine("Assigning password:" + words[1]);
+                                        CurrentUser.PassWord = words[1];
+                                        Console.WriteLine("Assigning phonenumber:" + words[2]);
+                                        CurrentUser.PassWord = words[2];
+                                        //Console.WriteLine("Updating sentFolder");
+                                        CurrentUser = Write.UpdateList(CurrentUser,Folder.sent);
+                                        //Console.WriteLine("Updating inboxFolder");
+                                        CurrentUser=Write.UpdateList(CurrentUser, Folder.inbox);
+                                        //Console.WriteLine("Updating draftFolder");
+                                        CurrentUser=Write.UpdateList(CurrentUser,Folder.drafts);
                                         found = true;
                                     }
                                     else { //return class of faults
@@ -307,8 +322,6 @@ namespace Server
                                     ////////////////
                                     ///
                                     Console.Write("SENDING TO CLIENT USING TCP");
-                                    
-                                    
                                     ReturnClass returntest = new ReturnClass();
                                     returntest.useracc = CurrentUser;
                                     returntest.success = true;
@@ -317,7 +330,7 @@ namespace Server
                                     byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                                     //SEND
                                     nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
-                                    Console.WriteLine("Useraccount returned from server: ");
+                                    Console.WriteLine("CurrentUserNameIs:"+CurrentUser.UserName);
                                     STCclient.Close();
                                     ////////////////
                                     ///TCP - END /// 
@@ -395,13 +408,16 @@ namespace Server
                         string domain = newEmail.receiverAddress.Substring(newEmail.receiverAddress.LastIndexOf('@') + 1); //Domain of reciever
                         Console.WriteLine(domain);
                         ReturnClass rtrn = new ReturnClass();
-                        if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
+                        Console.WriteLine("\n\nIN SEND: USERNAME IS:"+CurrentUser.UserName+"\n\n");
+                        Console.WriteLine("\n\nIN SEND: USERID IS:" + USER + "\n\n");
+                        CurrentUser.UserName = USER; //Needs changing temp fix?
+                            if (domain.Equals("wemail.com", StringComparison.OrdinalIgnoreCase))
                         {
                             try 
                                 {  
                                     var reciver = newEmail.receiverAddress;
                                     String reciverID = reciver.Substring(0, reciver.IndexOf("@"));
-                                       var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
+                                    var receiverPath = Path.Combine(dbdir+@"\Users\", reciverID);
                                     if (Directory.Exists(receiverPath)) {
                                         Write.Files2(newEmail);
                                         Write.Files(newEmail);
@@ -435,9 +451,10 @@ namespace Server
                             if (rtrn.success == true)
                             {
                                 //Needs to update inboxes of user account. Draft is not nessecary as it doesnt use this function
-                                CurrentUser = rtrn.useracc;
-                                CurrentUser = Write.UpdateList(CurrentUser,"sentFolder"); //responds to draftFolder, inboxFolder, sentFolder. Pretty self explanatory
-                                CurrentUser = Write.UpdateList(CurrentUser, "inboxFolder");
+                                rtrn.useracc=CurrentUser; //Was other way around b efore
+
+                                CurrentUser = Write.UpdateList(CurrentUser,Folder.sent); //responds to drafts, inbox, sent. Pretty self explanatory
+                                CurrentUser = Write.UpdateList(CurrentUser, Folder.inbox);
                             }
                             rtrn.useracc = CurrentUser;
                             string returnclassstring = serializer(rtrn);
@@ -460,9 +477,9 @@ namespace Server
                             try
                             {
                                 Console.WriteLine("Updating in box server side");
-                                Write.UpdateList(CurrentUser, "sentFolder");
-                                Write.UpdateList(CurrentUser, "draftFolder");
-                                CurrentUser = Write.UpdateList(CurrentUser, "inboxFolder");
+                                Write.UpdateList(CurrentUser, Folder.sent);
+                                Write.UpdateList(CurrentUser, Folder.drafts);
+                                CurrentUser = Write.UpdateList(CurrentUser, Folder.inbox);
                                 rtrn.success = true;
                             }
                             catch (Exception ex)
@@ -492,7 +509,6 @@ namespace Server
                 STCclient.Close();
                 client.Close();
                 CTSlistener.Stop(); 
-
            }
         }
 

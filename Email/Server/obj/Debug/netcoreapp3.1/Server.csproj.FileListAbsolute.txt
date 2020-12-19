@@ -43,7 +43,6 @@ C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netc
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.runtimeconfig.dev.json
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.dll
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\bin\Debug\netcoreapp3.1\Server.pdb
-C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csprojAssemblyReference.cache
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfoInputs.cache
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.AssemblyInfo.cs
 C:\Users\kampfvagen\Documents\GitHub\WeMailProjectV2\Email\Server\obj\Debug\netcoreapp3.1\Server.csproj.CoreCompileInputs.cache

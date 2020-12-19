@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Z/wmiF2s8c+W6gqCFyYBp/CjF3e9Hq8kNYYtYrh5zsEW+ufBMX1sgY7peWDxhidMHQ3KGi/LCH/HQzwi764Fhg==",
+  "dgSpecHash": "9MVjmLn5d4S2aqGV/gTBp59a29R5Pfm+8hX3YordAzjP7hRfDJzmulJEDLXzddCJ0ouFUOR1suoYnqQzqQlztA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Jeppe\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
+  "projectFilePath": "C:\\Users\\kampfvagen\\Documents\\GitHub\\WeMailProjectV2\\Email\\Server\\Server.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

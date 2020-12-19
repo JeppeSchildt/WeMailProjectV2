@@ -26,7 +26,8 @@ namespace CLIENT
     /// </summary>
     public partial class LogIn : Window 
     {
-        public UserAccount CurrUser = new UserAccount();
+
+        
         const int PORT_NO = 5000;
         const int PORT_N1 = 5001;
         const string LOCALHOST = "127.0.0.1";
@@ -62,6 +63,7 @@ namespace CLIENT
         }
 
         public static string userID;
+        public UserAccount CurrUser = new UserAccount();
         public void UserID_GotFocus(object sender, RoutedEventArgs e)
         {
             if (UserID.Text == "User ID")
@@ -147,6 +149,7 @@ namespace CLIENT
             XmlSerializer xmls = new XmlSerializer(RT.GetType());
             StringReader returnclasstostring = new StringReader(datafromserver);
             RT = (ReturnClass)xmls.Deserialize(returnclasstostring);
+            Console.WriteLine("\n\n" + "CLIENT SIDE - RECIEVED USER ACCOUNT WITH NAME:" + RT.useracc.UserName + "\n\n");
             Console.WriteLine("\n UserAccountID: " + RT.useracc.UserName);
             Console.WriteLine("\n " + RT.success.ToString());
 
@@ -218,5 +221,11 @@ namespace CLIENT
             UserName = UN;
             Password = Pass;
         }
+    }
+    public enum Folder
+    {
+        inbox,
+        sent,
+        drafts
     }
 }

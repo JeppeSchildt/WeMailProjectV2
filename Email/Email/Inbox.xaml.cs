@@ -22,16 +22,20 @@ namespace CLIENT
     public partial class Inbox : Window
     {
         private readonly LogIn _login;
-        
+        public UserAccount CurrUser = new UserAccount();
         public Inbox(LogIn logIn) //
         {
             InitializeComponent();
             _login = logIn;
+            CurrUser = _login.CurrUser;
         }
         public Inbox() //
         {
             InitializeComponent();
+            //CurrUser = _login.CurrUser;
+            Console.WriteLine("no param con: usracc:" +CurrUser.UserName);
         }
+
 
         public static List<string> FindSent()               // function to fund the mails under sent folder and store in the list
         {
@@ -78,7 +82,7 @@ namespace CLIENT
 
         private void NewEmail_Click(object sender, RoutedEventArgs e)
         {
-            SendEmail sendEmail = new SendEmail();            // show the next window
+            SendEmail sendEmail = new SendEmail(this);            // show the next window
             sendEmail.Show();
             this.Hide();
             return;
@@ -139,7 +143,6 @@ namespace CLIENT
             int bytesfromserver = nwStreamFromServer.Read(serverbuffer, 0, STCclient.ReceiveBufferSize);
             //convert into string
             string datafromserver = @Encoding.ASCII.GetString(serverbuffer, 0, bytesfromserver);
-
             //Need to deserialize
             ReturnClass RT = new ReturnClass();
             XmlSerializer xmls = new XmlSerializer(RT.GetType());
@@ -149,15 +152,7 @@ namespace CLIENT
             Console.WriteLine("\n " + RT.success.ToString());
             _login.CurrUser = RT.useracc;
             Console.WriteLine("this do be good sign");
-
-
-
-            
-        
-
             Console.WriteLine("[inbox.xaml.cs] Info from server: " + datafromserver);
-
-
         }
     }
 }
