@@ -58,7 +58,7 @@ namespace CLIENT
             dbdir = currentdir;
             //MessageBox.Show("LOCATION: \n" +dbdir);
             //TESTING FUNCTION:
-            MessageBox.Show("Database directory :" + dbdir);
+           // MessageBox.Show("Database directory :" + dbdir);
         }
 
         public static string userID;
@@ -119,6 +119,7 @@ namespace CLIENT
             LoginAttempt loginattempt = new LoginAttempt(UserName, PassW);
             XmlSerializer xmlSerializer = new XmlSerializer(loginattempt.GetType());
             StringWriter stringified = new StringWriter();
+
             xmlSerializer.Serialize(stringified, loginattempt);
             string res = LogIn.userID + DL + "LOGIN" + DL + stringified.ToString();
             byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);

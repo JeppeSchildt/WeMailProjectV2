@@ -102,4 +102,3 @@ S:\Email\WeMailProjectV2\Email\Email\obj\Debug\CLIENT.csproj.GenerateResource.ca
 S:\Email\WeMailProjectV2\Email\Email\obj\Debug\CLIENT.csproj.CoreCompileInputs.cache
 S:\Email\WeMailProjectV2\Email\Email\obj\Debug\Email.exe
 S:\Email\WeMailProjectV2\Email\Email\obj\Debug\Email.pdb
-S:\Email\WeMailProjectV2\Email\Email\obj\Debug\CLIENT.csprojAssemblyReference.cache
