@@ -27,12 +27,14 @@ namespace GUI
         public UserAccount currentUser; 
 
         //Constructor
-        public Form1()
+        public Form1(UserAccount CU)
         {
             InitializeComponent();
+            currentUser = CU;
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 60);
             panelMenu.Controls.Add(leftBorderBtn);
+            //MessageBox.Show("OL"+currentUser.UserName);
             //Form
             this.Text = string.Empty;
             this.ControlBox = false;
@@ -124,21 +126,30 @@ namespace GUI
         private void InboxBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.blue_Munsell);
-            OpenChildForm(new FormInbox());
+            FormInbox InboxForm = new FormInbox();
+            InboxForm.mainFormReference = this;
+            OpenChildForm(InboxForm);
+            
+            //OpenChildForm(new FormInbox());
             lblTitleChildForm.Text = "Inbox";
         }
 
         private void OutboxBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.blue_Munsell);
-            OpenChildForm(new FormOutbox());
+            FormOutbox OutboxForm = new FormOutbox();
+            OutboxForm.mainFormReference = this;
+            OpenChildForm(OutboxForm);
             lblTitleChildForm.Text = "Outbox";
         }
 
         private void DraftsBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.blue_Munsell);
-            OpenChildForm(new FormDrafts());
+            FormDrafts draftsform = new FormDrafts();
+            draftsform.mainFormReference = this;
+
+            OpenChildForm(draftsform);
             lblTitleChildForm.Text = "Drafts";
         }
 
@@ -183,12 +194,14 @@ namespace GUI
         private void label2_Click(object sender, EventArgs e)
         {
             this.Close();
+            //this.Hide();
             previousLoginForm.Show();
         }
 
         private void iconPictureBox1_Click(object sender, EventArgs e)
         {
             this.Close();
+            //this.Hide();
             previousLoginForm.Show(); 
         }
 
