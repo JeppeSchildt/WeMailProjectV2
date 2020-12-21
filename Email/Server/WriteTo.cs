@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
+using System.Collections;
 namespace Server
 {
 
@@ -138,15 +138,37 @@ namespace Server
         public static UserAccount UpdateList(UserAccount UA,Folder folder) //Updates list of emails connected to account
         {
             string foldertype = folder.ToString();
-            Console.WriteLine("\n\n WTFISWRONG:"+UA.UserName+"\n\n");
-            string path = dbdir + "/Users/" + UA.UserName + @"/"+foldertype; //Path to the folders
+            Console.WriteLine("\n\n Updating Folder"+foldertype+" for:"+UA.UserName+"\n\n");
+            string path = dbdir + @"\Users\" + UA.UserName + @"\"+foldertype; //Path to the folders
             string[] extension = { ".txt" };
             var files= Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                 .Where(s => extension.Any(ext => ext == System.IO.Path.GetExtension(s)));
             List<string> textfile = new List<string>(); //List of the subject matters 
+            /*
+            for (int i = 0; i < textfile.Count; i++)
+            {
+                Console.WriteLine("\n"+textfile[i]);
+            } */
+            string[] testing = Directory.GetFiles(path);
+            foreach (string filename in testing)
+                Console.WriteLine("Processed file '{0}'.",filename);
+
             textfile = files.ToList();     // textfile er en list med string
-            List<Email> updatedList = new List<Email>(); 
-            updatedList = readIntoEmailClass(UA,foldertype,textfile);
+            List<Email> updatedList = new List<Email>();
+            //updatedList = readIntoEmailClass(UA,foldertype,textfile);
+            List<string> tt = new List<string>();
+            tt = testing.ToList();
+            Console.WriteLine("\n                COUNT"+tt.Count()+"\n\n");
+            updatedList = readIntoEmailClass(UA, foldertype, tt);
+
+            foreach (string filename in tt)
+                Console.WriteLine("Processed file v2 '{0}'.", filename);
+
+            Console.WriteLine("\n\n AMOUNT IN FOLDER:" + updatedList.Count() + "\n\n");
+            for (int i = 0; i < updatedList.Count; i++)
+            {
+                Console.WriteLine("\n\n StringList:"+i.ToString()+" "+textfile[i]);
+            }
             switch(foldertype)
             {
                 case ("inbox"):
@@ -162,25 +184,21 @@ namespace Server
                     UA.sentFolder = updatedList;
                     break;
             }
-
-            //Needs to be serialized to email
-
-            //UA.draftFolder;
             return UA;
         }
 
         public static List<Email> readIntoEmailClass(UserAccount UA, string foldertype, List<string> texts) //Takes list of email names and creates+returns instance list from it.
         {
-            Console.Write("We in writeTo.cs:readIntoEmailClass");
+            //Console.Write("We in writeTo.cs:readIntoEmailClass");
             Console.Write("DBDIR: " + dbdir);
             List<Email> listOfEmails= new List<Email>();
-            Email email = new Email();
-         for (int i = 0; i<texts.Count;i++) {
-                //using (var stringread = new StreamReader(dbdir+"/Users/"+UA.UserName+@"/"+foldertype+@"/"+texts[0]+".txt"))  // read the txt file into email class
+            
+            Console.WriteLine("ReadIntoClass:     Amount: "+texts.Count+"\n Foldertype::"+foldertype);
+         for (int i = 0; i<texts.Count();i++) {
+                Email email = new Email();
                 using (var stringread = new StreamReader(texts[i]))
-
                 {
-                    Console.WriteLine(texts[i]);
+                    Console.WriteLine("OL"+texts[i]);
                     while (!stringread.EndOfStream)
                     {
                         var line = stringread.ReadLine();
@@ -192,30 +210,15 @@ namespace Server
                         email.timeStamp = words[3];
                         email.contentText = words[4];
                         email.emailFlag = words[5];
+                        email.subjectMatter = texts[i].Substring(texts[i].LastIndexOf(@"\")+1).Substring(0, texts[i].Substring(texts[i].LastIndexOf(@"\")).LastIndexOf(@".")-1); 
+                        Console.WriteLine("YAX: "+email.subjectMatter);
                     }
-                    listOfEmails.Add(email); //Cannot access using indices, as initial capacity is 0. This makes it grow dynamically. 
-                    i++;
                 }
+                //Console.WriteLine("EmailSubject for :" + i + @"->" + email.subjectMatter);
+                listOfEmails.Add(email); //Cannot access using indices, as initial capacity is 0. This makes it grow dynamically. 
             }
             return listOfEmails;
         }    
-         
-        /*
-        public static List<string> FindSent()               // function to fund the mails under sent folder and store in the list
-        {
-            string path = LogIn.dbdir + "/Users/" + LogIn.userID+"/sent";
-            string[] extensions = { ".txt" };
-            
-            var files = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
-                .Where(s => extensions.Any(ext => ext == System.IO.Path.GetExtension(s)));
-
-            List<string> textfile = new List<string>();
-
-            textfile = files.ToList();     // textfile er en list med string
-           
-            return textfile;
-        }
-        */
     }
 }
 

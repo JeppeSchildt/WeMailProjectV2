@@ -53,13 +53,7 @@ namespace CLIENT
             {
                 MessageBox.Show("Error setting the Working Directory! \n" + @"Make sure your WeMailV2\Email\"+"\nDirectory is working and named as such! ");
             }
-            // TESTING FUNCTION:
-            //MessageBox.Show("Error setting the Working Directory! \n" + "Make sure your: \n" + @"WeMailV2\Email\ Directory" + "\n is working and named as such! ");
-
             dbdir = currentdir;
-            //MessageBox.Show("LOCATION: \n" +dbdir);
-            //TESTING FUNCTION:
-           // MessageBox.Show("Database directory :" + dbdir);
         }
 
         public static string userID;
@@ -115,14 +109,19 @@ namespace CLIENT
             /////////////////////
             Console.WriteLine("Beginning Serialisation...\n");
             TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
+
             NetworkStream nwStream = tcpclient.GetStream();
             LoginAttempt loginattempt = new LoginAttempt(UserName, PassW);
+
+
             XmlSerializer xmlSerializer = new XmlSerializer(loginattempt.GetType());
             StringWriter stringified = new StringWriter();
 
             xmlSerializer.Serialize(stringified, loginattempt);
             string res = LogIn.userID + DL + "LOGIN" + DL + stringified.ToString();
             byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
+
+
             Console.WriteLine("Sending : " + res);
             nwStream.Write(bytesToSend, 0, bytesToSend.Length);
 
@@ -136,6 +135,7 @@ namespace CLIENT
             STClistener.Start();
             TcpClient STCclient = STClistener.AcceptTcpClient();
             NetworkStream nwStreamFromServer = STCclient.GetStream();
+
             byte[] serverbuffer = new byte[STCclient.ReceiveBufferSize];
             //read
             int bytesfromserver = nwStreamFromServer.Read(serverbuffer, 0, STCclient.ReceiveBufferSize);

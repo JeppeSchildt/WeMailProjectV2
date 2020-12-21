@@ -6,6 +6,11 @@ using System.Net.Sockets;
 using System.Net.Mail;
 using System.Xml.Serialization;
 using System.IO;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Markup;
+
 using s = System.String;
 
 public enum Folder {
@@ -55,7 +60,6 @@ public class UserAccount
     }
 }
 
-
 public class EmailFolder
 {
     public string folderType;
@@ -86,6 +90,11 @@ public class ReturnClass
         success = succ;
         exceptionstring = excep;
         useracc = user;
+    }
+    public void Successfull()
+    {
+        this.success = true;
+        this.exceptionstring = "";
     }
 }
 public class Email
@@ -126,11 +135,10 @@ public class Email
     public void Send() //Sends mail using SMTP
     {
         //UserAccount.ReturnClass test = new UserAccount.ReturnClass();
-        
+       
         MailAddress Recipient = new MailAddress(this.receiverAddress);
-        MailAddress Sender = new MailAddress(this.senderAddress);
+        MailAddress Sender = new MailAddress(this.senderAddress); 
         MailMessage message = new MailMessage(Sender, Recipient);
-
         string subject = this.subjectMatter;
         string text = this.contentText;
         // string domain = to.Substring(to.LastIndexOf('@') + 1); //Takes everything to the right of @
@@ -140,12 +148,12 @@ public class Email
     }
     public void Forward(MailAddress Recipient) //Not sure about recipient vs sender
     {
-
         MailAddress Sender = new MailAddress(this.senderAddress);
         MailMessage newmessage = new MailMessage(Sender, Recipient);
         newmessage.Subject = "Fwd: " + this.subjectMatter;
         newmessage.Body = "Forwarded: " + this.contentText;
         Send(newmessage);
+        Console.WriteLine("Mail successfully forwarded to:"+Recipient.Address);
     }
     public void Reply(string text)
     {
@@ -189,7 +197,7 @@ namespace Server
                 //---listen at the specified IP and port no.---
                 IPAddress localAdd = IPAddress.Parse(SERVER_IP);
                 TcpListener CTSlistener = new TcpListener(localAdd, PORT_NO);
-                Console.WriteLine("Listening...");
+                Console.WriteLine("\nListening...");
                 CTSlistener.Start();
                 //---incoming client connected---
                 TcpClient client = CTSlistener.AcceptTcpClient();
@@ -208,9 +216,8 @@ namespace Server
                 byte[] teasting = Encoding.ASCII.GetBytes("Are you receiving this message?");
                 nwStream.Write(buffer, 0, teasting.Length);
                 //start STC client //
-                TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1); //error here
+                TcpClient STCclient = new TcpClient(SERVER_IP, PORT_N1);
                 NetworkStream nwStreamSTC = STCclient.GetStream();
-
                 UserAccount CurrentUser = new UserAccount();
                 //---request handling---
                 switch (REQ) {
@@ -247,6 +254,7 @@ namespace Server
                                     //SEND
                                     nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                                     //could close STC
+                                    STCclient.Close(); //2012.1929
                                 }
                                 else 
                                 {
@@ -465,14 +473,54 @@ namespace Server
                         }
                     case "FORWARD":
                         { //email deserialization
+                          //should recieve: UserREQemailnew recipient
+                          //WHEN FORWARDING - NEED TO SPECIFY ADDRESS OFC
+                            Email emailtoforward = new Email();
+                            dataReceived = dataReceived.Substring(0, dataReceived.IndexOf('')); //
+                            string newrecipient = dataReceived.Substring(dataReceived.IndexOf('') + 1);
+                            emailtoforward = deserializer(emailtoforward, dataReceived);
+                            MailAddress rec = new MailAddress(newrecipient);
+                            emailtoforward.Forward(rec);
+                            //Should return userclass
+                            ReturnClass RT = new ReturnClass();
+                            RT.Successfull(); //Sets successflag to true, and exceptionstring to be empty
+                            CurrentUser=Write.UpdateList(CurrentUser,Folder.sent); //Updates inboxes
+                            CurrentUser=Write.UpdateList(CurrentUser, Folder.inbox); //Not sure if needed. Does it not update inbox when showing anyways?
+                            RT.useracc = CurrentUser;
+                            //Return that shit
+                            string returnclassstring = serializer(RT);
+                            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                            //SEND
+                            nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                             break;
                         }
                     case "REPLY":
                         { //email deserialization
+                            Email emailtoforward = new Email();
+                            dataReceived = dataReceived.Substring(0, dataReceived.IndexOf('')); //
+                            string newtext = dataReceived.Substring(dataReceived.IndexOf('') + 1);
+                            emailtoforward = deserializer(emailtoforward, dataReceived);
+                            emailtoforward.Reply(newtext); //old email + the new text
+                            //Should return userclass
+                            ReturnClass RT = new ReturnClass();
+                            RT.Successfull(); //Sets successflag to true, and exceptionstring to be empty
+                            CurrentUser = Write.UpdateList(CurrentUser, Folder.sent); //Updates inboxes
+                            CurrentUser = Write.UpdateList(CurrentUser, Folder.inbox); //Not sure if needed. Does it not update inbox when showing anyways?
+                            RT.useracc = CurrentUser;
+                            //Return that shit
+                            string returnclassstring = serializer(RT);
+                            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                            //SEND
+                            nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
                             break;
                         }
                     case "UPDATEINBOX":
                         { //Should find folder to update in serialized message and only update one, however only a question of time complexity
+                            //Currently recieves: UserID + REQ + UserAccount
+                            Console.WriteLine("jepp + \n :" + dataReceived);
+                            string curruser = dataReceived; //Takes current user
+                            dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
+                            CurrentUser = deserializer(CurrentUser,curruser);
                             ReturnClass rtrn = new ReturnClass();
                             try
                             {
@@ -492,12 +540,53 @@ namespace Server
                             byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
                             //SEND
                             nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+
+                            STCclient.Close();
                             //inbox deserialization
                             break;
                         }
                     case "DELETE":
-                        { //email deserialization
-                        break;
+                        {
+                            //user dl req dl useraccount dl foldertype dl filename
+                            //Catch useraccount
+                            string curruser = dataReceived.Substring(0,dataReceived.IndexOf(''));
+                            CurrentUser = deserializer(CurrentUser, curruser);
+                            dataReceived = dataReceived.Substring(dataReceived.IndexOf('')+1);
+                            string foldertype = dataReceived.Substring(0,dataReceived.IndexOf(''));
+                            dataReceived = dataReceived.Substring(dataReceived.IndexOf('') + 1);
+                            string filename = dataReceived;
+                            string path = dbdir+@"\Users\"+CurrentUser.UserName+@"\"+foldertype;
+                            Console.WriteLine("Foldertype recieved: "+foldertype+" filename recieved: "+filename);
+                            string[] testing = Directory.GetFiles(path);
+                            foreach (string fileiterator in testing) //loop through the folder 
+                            {
+                                Console.WriteLine("Processed file '{0}'.", fileiterator);
+                                string abb = fileiterator.Substring(fileiterator.LastIndexOf(@"\")+1);
+                                Console.WriteLine("Abb: " + abb);
+                                Console.WriteLine("filename: "+filename+@".txt");
+                                if (abb.Equals(filename+@".txt"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write("\nFound file to delete \n");
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                    File.Delete(fileiterator);
+                                    Console.Write("\nFile Deleted");
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                }
+                             }
+                            ReturnClass RT = new ReturnClass();   
+                            RT.Successfull();
+                            Write.UpdateList(CurrentUser, Folder.sent);
+                            Write.UpdateList(CurrentUser, Folder.drafts);
+                            CurrentUser = Write.UpdateList(CurrentUser, Folder.inbox);
+                            RT.useracc = CurrentUser;
+                            //send that shit back
+                            string returnclassstring = serializer(RT);
+                            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(returnclassstring);
+                            //SEND
+                            nwStreamSTC.Write(bytesToSend, 0, bytesToSend.Length);
+                            STCclient.Close();
+                            break;
                         }
                     case "DRAFT": 
                         { //email deserialization
@@ -515,6 +604,13 @@ namespace Server
         private static void read()
         {
             throw new NotImplementedException();
+        }
+        public UserAccount UpdateAll(UserAccount UA) //Updates all 3 lists
+        {
+            UA = Write.UpdateList(UA, Folder.inbox); 
+            UA =Write.UpdateList(UA,Folder.sent);
+            UA = Write.UpdateList(UA, Folder.drafts);
+            return UA;
         }
     }
 }

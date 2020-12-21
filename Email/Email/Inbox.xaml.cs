@@ -41,14 +41,10 @@ namespace CLIENT
         {
             string path = LogIn.dbdir + "/Users/" + LogIn.userID+"/sent";
             string[] extensions = { ".txt" };
-            
             var files = Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                 .Where(s => extensions.Any(ext => ext == System.IO.Path.GetExtension(s)));
-
             List<string> textfile = new List<string>();
-
             textfile = files.ToList();     // textfile er en list med string
-           
             return textfile;
         }
 
@@ -97,12 +93,9 @@ namespace CLIENT
             {
                 File.Delete(fil[0]);
                 MessageBox.Show("Sent Email has been delete");
-
-
             }
             else {
                 MessageBox.Show("Folder is empty");
-
             }
 
 

@@ -106,7 +106,7 @@ namespace CLIENT
     }
     public class SendMail
     {
-        static string server = "mail.smtp2go.com"; //Current SMTP server. Coupled to IP   
+        public static string server = "mail.smtp2go.com"; //Current SMTP server. Coupled to IP   
         /*
         public static void Regular(MailAddress Sender, MailAddress Recipient, MailMessage message)
         {
@@ -182,7 +182,6 @@ namespace CLIENT
                     STClistener.Stop();
                     tcpclient.Close();
                     return false;
-
                 }
             }
             catch (Exception ex) {
@@ -190,6 +189,24 @@ namespace CLIENT
                 //Should check if TCP shit is open n close if they are
                 return false;
             }
+        }
+        public static bool Forward(MailAddress Sender, MailAddress Recipient, MailMessage message,string newrecipient) //Could change to recieve email class instead
+        {
+            char DL = '';
+            const int PORT_NO = 5000;
+            const string LOCALHOST = "127.0.0.1";
+            TcpClient tcpclient = new TcpClient(LOCALHOST, PORT_NO);
+            NetworkStream nwStream = tcpclient.GetStream();
+            string flag = "FWD";
+            Email test = new Email("NON", Sender.Address, Recipient.Address, DateTime.Today.ToShortDateString(), message.Subject, message.Body, flag);
+            XmlSerializer xmlSerializer = new XmlSerializer(test.GetType());
+            StringWriter stringified = new StringWriter();
+            xmlSerializer.Serialize(stringified, test);
+            string res = LogIn.userID + DL + "FWD" + DL + stringified.ToString()+DL+newrecipient;
+            byte[] bytesToSend = ASCIIEncoding.UTF8.GetBytes(res);
+            Console.WriteLine("Sending : " + message.Body);
+            nwStream.Write(bytesToSend, 0, bytesToSend.Length);
+            return true;
         }
     }
     public class ExceptionHandler
