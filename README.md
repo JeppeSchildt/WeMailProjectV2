@@ -1,13 +1,3 @@
-# WeMailProjectV2
-The other one got fucked due to naming conventions
-
-
-# Overskrift
-
-## Underoverskrift
-
-Normal tekst
-
--  `kan bruges til command lines`
-
-Sådan her laver man et [link](https://www.google.dk/?hl=da)
+# WeMail Project
+Developed as final project in a 'Software Engineering' class, 2020F semester at Aarhus University. 
+Uses a client-server architecture with RPC's over TCP ports using XML serialization, WFA for GUI and the native folder system as an 'abstract database'. 
